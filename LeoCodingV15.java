@@ -37,10 +37,16 @@ public class LeoCodingV15 extends LinearOpMode {
     private DcMotor left_back;
     private DcMotor right_back;
 
-    private DcMotor launch;
-    private DcMotor intake;
-    private CRServo Conveyor1;
-    private CRServo Conveyor2;
+//    private DcMotor launch;
+//    private DcMotor intake;
+    private CRServo Intake1;
+    private CRServo Intake2;
+    private DcMotor Launch1;
+    private DcMotor Launch2;
+
+    private DcMotor Conveyor;
+
+    private Servo Stopper;
 
     //    private Servo leftgrab;
 //    private Servo rightgrab;
@@ -68,16 +74,20 @@ public class LeoCodingV15 extends LinearOpMode {
         left_back = hardwareMap.get(DcMotor.class, "left_back");
         right_back = hardwareMap.get(DcMotor.class, "right_back");
 
-        launch= hardwareMap.get(DcMotor.class, "launch");
-
-        intake= hardwareMap.get(DcMotor.class, "intake");
-
-
-        Conveyor1 = hardwareMap.get(CRServo.class, "Conveyor1");
-        Conveyor2 = hardwareMap.get(CRServo.class, "Conveyor2");
+//        launch= hardwareMap.get(DcMotor.class, "launch");
+//
+//        intake= hardwareMap.get(DcMotor.class, "intake");
 
 
+        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
+        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
 
+        Launch1 = hardwareMap.get(DcMotor.class, "Launch1");
+        Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
+
+        Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
+
+        Stopper = hardwareMap.get(Servo.class, "Stopper");
 
 
 
@@ -85,8 +95,10 @@ public class LeoCodingV15 extends LinearOpMode {
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
-
+        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.REVERSE);
+        Conveyor.setDirection(DcMotor.Direction.REVERSE);
+
         //right_drive is also reversed at line 325 and doesn't need to be reversed
 //        right_drive.setDirection(DcMotor.Direction.REVERSE);
 
@@ -120,6 +132,9 @@ public class LeoCodingV15 extends LinearOpMode {
         right_drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        Launch1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        cap.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        cap2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         YawPitchRollAngles robotOrientation;
@@ -129,10 +144,10 @@ public class LeoCodingV15 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            float LF_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) * 1 );
-            float RF_Power=((-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) * 1);
-            float LB_Power=((gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x) * 1);
-            float RB_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) * 1);
+            float LF_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x));
+            float RF_Power=((-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x));
+            float LB_Power=((gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x));
+            float RB_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x));
 
 
             // mecanum code
@@ -143,10 +158,10 @@ public class LeoCodingV15 extends LinearOpMode {
             }
             if (!pressed) {
 
-                left_drive.setPower((LF_Power)*.7);
-                right_drive.setPower((RF_Power)*.7);
-                left_back.setPower((LB_Power)*.7);
-                right_back.setPower((RB_Power)*.7);
+                left_drive.setPower((LF_Power)*1);
+                right_drive.setPower((RF_Power)*1);
+                left_back.setPower((LB_Power)*1);
+                right_back.setPower((RB_Power)*1);
 
             } else {
                 left_drive.setPower((LF_Power) * .4);
@@ -155,45 +170,70 @@ public class LeoCodingV15 extends LinearOpMode {
                 right_back.setPower((RB_Power) * .4);
             }
 
-            if(gamepad2.x){
-                intake.setPower(1);
-                Conveyor1.setPower(1);
-                Conveyor2.setPower(1);
-            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         Intake1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+         Intake2.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+
+         Conveyor.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+
+
+         if(gamepad2.x){
+             Stopper.setPosition(1);
+         }
             if(gamepad2.y){
-                intake.setPower(-1);
-                Conveyor1.setPower(-1);
-                Conveyor2.setPower(-1);
+                Stopper.setPosition(0);
             }
 
+            if(gamepad2.dpad_up) {
+                Launch1.setPower(-.5);
+                Launch2.setPower(.5);
+            }
+            if(gamepad2.dpad_down) {
+                Launch1.setPower(-.4);
+                Launch2.setPower(.4);
+            }
+
+            if(gamepad2.b) {
+                Launch1.setPower(0);
+                Launch2.setPower(0);
+            }
+
+            if(gamepad1.x ||gamepad2.x){
+                Stopper.setPosition(1);
+//                Launch1.setPower(-1);
+//                Launch2.setPower(1);
+                sleep(800);
+//                Launch1.setPower(0);
+//                Launch2.setPower(0);
+                Stopper.setPosition(0);
+
+            }
+//        if(gamepad2.x){
+//            Conveyor.setPower(1);
+//        }
+//
+//        if(gamepad2.y){
+//            Conveyor.setPower(-1);
+//        }
 
 
-
-
-
-//if(gamepad1.b){
-//    boolean w=true;
-//}
-
-////            LLResult result = limelight.getLatestResult();
-//            if (result != null) {
-//                if (result.isValid()) {
-//                    Pose3D botpose = result.getBotpose();
-//                    telemetry.addData("tx", result.getTx());
-//                    telemetry.addData("ty", result.getTy());
-//                    telemetry.addData("Botpose", botpose.toString());
-////                    telemetry.update();
-//                }
-//            }
 
             //disable for matches!!!
+            telemetry.addData("speed", gamepad1.left_stick_y);
 
-//            telemetry.addData("rMotor", right_back.getCurrentPosition());
-//            telemetry.addData("LMotor", left_back.getCurrentPosition());
-//            telemetry.addData("FrMotor", right_drive.getCurrentPosition());
-//            telemetry.addData("FLMotor", left_drive.getCurrentPosition());
-//            telemetry.addData("lefttrigger", gamepad2.left_trigger);
-//            telemetry.addData("righttrigger", gamepad2.right_trigger);
 
 //            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("RedValue",  color.red());
@@ -221,4 +261,3 @@ public class LeoCodingV15 extends LinearOpMode {
 
 
 }
-
