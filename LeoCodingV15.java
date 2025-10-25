@@ -46,7 +46,7 @@ public class LeoCodingV15 extends LinearOpMode {
 
     private DcMotor Conveyor;
 
-    private Servo Stopper;
+    private CRServo Stopper;
 
     //    private Servo leftgrab;
 //    private Servo rightgrab;
@@ -87,7 +87,7 @@ public class LeoCodingV15 extends LinearOpMode {
 
         Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
 
-        Stopper = hardwareMap.get(Servo.class, "Stopper");
+        Stopper = hardwareMap.get(CRServo.class, "Stopper");
 
 
 
@@ -95,9 +95,11 @@ public class LeoCodingV15 extends LinearOpMode {
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
+        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
         Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.REVERSE);
         Conveyor.setDirection(DcMotor.Direction.REVERSE);
+
 
         //right_drive is also reversed at line 325 and doesn't need to be reversed
 //        right_drive.setDirection(DcMotor.Direction.REVERSE);
@@ -191,18 +193,24 @@ public class LeoCodingV15 extends LinearOpMode {
 
 
          if(gamepad2.x){
-             Stopper.setPosition(1);
+             Stopper.setPower(1);
          }
-            if(gamepad2.y){
-                Stopper.setPosition(0);
-            }
+         else if(gamepad2.y){
+             Stopper.setPower(-1);
+         }
+         else {
+             Stopper.setPower(0);
+         }
+//            if(gamepad2.y){
+//                Stopper.setPower(-1);
+//            }
 
             if(gamepad2.dpad_up) {
-                Launch1.setPower(-.5);
+                Launch1.setPower(.5);
                 Launch2.setPower(.5);
             }
             if(gamepad2.dpad_down) {
-                Launch1.setPower(-.4);
+                Launch1.setPower(.4);
                 Launch2.setPower(.4);
             }
 
@@ -211,16 +219,16 @@ public class LeoCodingV15 extends LinearOpMode {
                 Launch2.setPower(0);
             }
 
-            if(gamepad1.x ||gamepad2.x){
-                Stopper.setPosition(1);
-//                Launch1.setPower(-1);
-//                Launch2.setPower(1);
-                sleep(800);
-//                Launch1.setPower(0);
-//                Launch2.setPower(0);
-                Stopper.setPosition(0);
-
-            }
+//            if(gamepad2.x){
+//                Stopper.setPower(1);
+////                Launch1.setPower(1);
+////                Launch2.setPower(1);
+//                sleep(800);
+////                Launch1.setPower(0);
+////                Launch2.setPower(0);
+//                Stopper.setPower(0);
+//
+//            }
 //        if(gamepad2.x){
 //            Conveyor.setPower(1);
 //        }
