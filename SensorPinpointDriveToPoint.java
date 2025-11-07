@@ -103,7 +103,7 @@ public class SensorPinpointDriveToPoint extends LinearOpMode {
                      */
                     if (nav.driveTo(odo.getPosition(), TARGET_1, 0.7, 10)){
                         telemetry.addLine("at position #1!");
-                        stateMachine = StateMachine.AT_TARGET;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_2;
                     }
                     break;
                 case DRIVE_TO_TARGET_2:

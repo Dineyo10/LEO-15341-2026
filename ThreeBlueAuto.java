@@ -1,31 +1,23 @@
 package org.firstinspires.ftc.teamcode;
 
-import static java.lang.Math.PI;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.hardware.limelightvision.LLResult;
-//import com.qualcomm.hardware.limelightvision.Fiducial;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.util.List;
 import java.util.Locale;
 
-@Autonomous(name="DecodeAuto", group="Auto")
+@Autonomous
 //@Disabled
 
-public class DecodeAuto extends LinearOpMode {
+public class ThreeBlueAuto extends LinearOpMode {
 
     DcMotor leftFrontDrive;
     DcMotor rightFrontDrive;
@@ -45,7 +37,7 @@ public class DecodeAuto extends LinearOpMode {
     private VisionPortal visionPortal;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
     DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
-
+    //starting point alinged with the middle of the back wall is -45, -40, 14.5
     enum StateMachine {
         WAITING_FOR_START,
         AT_TARGET,
@@ -70,18 +62,17 @@ public class DecodeAuto extends LinearOpMode {
         DRIVE_TO_TARGET_19,
         DRIVE_TO_TARGET_20
     }
-
-    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,200,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, 500, 0, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,500,0, AngleUnit.DEGREES,00);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 500, -600, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -400, 950, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -1300, 800, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, -1300, 1200, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, -400, 1200, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_9 = new Pose2D(DistanceUnit.MM, -1300, 1200, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_10 = new Pose2D(DistanceUnit.MM, -1300, 1350, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_11 = new Pose2D(DistanceUnit.MM, -400, 1350, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, -500+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-800+45,0+40,AngleUnit.DEGREES,-90-14.5);
+    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -200+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -200+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, 200+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, 200+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, 200+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_9 = new Pose2D(DistanceUnit.MM, 200+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_10 = new Pose2D(DistanceUnit.MM, 200+45,0+40,AngleUnit.DEGREES,0-14.5);
+    static final Pose2D TARGET_11 = new Pose2D(DistanceUnit.MM, 200+45,0+40,AngleUnit.DEGREES,0-14.5);
     static final Pose2D TARGET_12 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_13 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_14 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
@@ -203,8 +194,8 @@ public class DecodeAuto extends LinearOpMode {
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
                     if (nav.driveTo(odo.getPosition(), TARGET_1, .7, 2)){
-                    Stopper.setPower(.3);
-                        telemetry.addLine("at position #1!");
+                         launch();
+                         telemetry.addLine("at position #1!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_2;
 //                        launch();
                     }

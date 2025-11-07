@@ -172,20 +172,6 @@ public class LeoCodingV15 extends LinearOpMode {
                 right_back.setPower((RB_Power) * .4);
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
          Intake1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
          Intake2.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
 
@@ -240,7 +226,7 @@ public class LeoCodingV15 extends LinearOpMode {
 
 
             //disable for matches!!!
-            telemetry.addData("speed", gamepad1.left_stick_y);
+//            telemetry.addData("speed", gamepad1.left_stick_y);
 
 
 //            telemetry.addData("BlueValue", color.blue());

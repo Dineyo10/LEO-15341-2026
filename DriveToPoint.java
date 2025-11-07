@@ -40,7 +40,7 @@ public class DriveToPoint {
         IN_BOUNDS
     }
 
-    private static double xyTolerance = 12;
+    private static double xyTolerance = 25;
     private static double yawTolerance = 0.0349066;
 
     private static double pGain = 0.008;
@@ -169,10 +169,10 @@ public class DriveToPoint {
     }
 
     private void calculateMecanumOutput(double forward, double strafe, double yaw) {
-        double leftFront = forward - -strafe - yaw;
-        double rightFront = forward + -strafe + yaw;
-        double leftBack = forward + -strafe - yaw;
-        double rightBack = forward - -strafe + yaw;
+        double leftFront = -forward - strafe + yaw;
+        double rightFront = forward - strafe + yaw;
+        double leftBack = -forward + strafe + yaw;
+        double rightBack = -forward - strafe - yaw;
 
         double max = Math.max(Math.abs(leftFront), Math.abs(rightFront));
         max = Math.max(max, Math.abs(leftBack));
