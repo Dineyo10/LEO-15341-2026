@@ -17,7 +17,7 @@ import java.util.Locale;
 @Autonomous
 //@Disabled
 
-public class ThreeBlueAuto extends LinearOpMode {
+public class ThreeRedAuto extends LinearOpMode {
 
     DcMotor leftFrontDrive;
     DcMotor rightFrontDrive;
@@ -69,14 +69,14 @@ public class ThreeBlueAuto extends LinearOpMode {
     double rStart =21.46;
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, -760+67,0+56,AngleUnit.DEGREES,-90-21.46);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-760-67,-500-56,AngleUnit.DEGREES,-90-21.46);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -50-67,-50-56,AngleUnit.DEGREES,21.46-21.46);
-    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 0+67,0+56,AngleUnit.DEGREES,0-21.46);
-    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
-    static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
-    static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
-    static final Pose2D TARGET_9 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, -760+56,0+67,AngleUnit.DEGREES,90+21.46);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-760-56,-500-67,AngleUnit.DEGREES,90+21.46);
+    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -50-56,-50-67,AngleUnit.DEGREES,21.46+21.46);
+    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 0+56,0+67,AngleUnit.DEGREES,0+21.46);
+    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, 200+56,0+67,AngleUnit.DEGREES,0+21.46);
+    static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, 200+56,0+67,AngleUnit.DEGREES,0+21.46);
+    static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, 200+56,0+67,AngleUnit.DEGREES,0+21.46);
+    static final Pose2D TARGET_9 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0+21.46);
     static final Pose2D TARGET_10 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
     static final Pose2D TARGET_11 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
     static final Pose2D TARGET_12 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
