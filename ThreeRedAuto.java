@@ -23,8 +23,8 @@ public class ThreeRedAuto extends LinearOpMode {
     DcMotor rightFrontDrive;
     DcMotor leftBackDrive;
     DcMotor rightBackDrive;
-    private CRServo Intake1;
-    private CRServo Intake2;
+//    private CRServo Intake1;
+//    private CRServo Intake2;
     private DcMotor Launch1;
     private DcMotor Launch2;
 
@@ -104,8 +104,8 @@ public class ThreeRedAuto extends LinearOpMode {
         leftBackDrive   = hardwareMap.get(DcMotor.class, "left_back");
         rightBackDrive  = hardwareMap.get(DcMotor.class, "right_back");
 
-        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
-        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
+//        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
+//        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
 
         Launch1 = hardwareMap.get(DcMotor.class, "Launch1");
         Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
@@ -121,7 +121,7 @@ public class ThreeRedAuto extends LinearOpMode {
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
         Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
-        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+//        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         Conveyor.setDirection(DcMotor.Direction.REVERSE);
 

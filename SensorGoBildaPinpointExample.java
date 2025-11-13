@@ -22,13 +22,30 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.hardware.limelightvision.LLResult;
+//import com.qualcomm.hardware.limelightvision.Fiducial;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
+import java.util.List;
 import java.util.Locale;
 
 /*
@@ -65,6 +82,8 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
 
     double oldTime = 0;
+    private Limelight3A limelight;
+    private int AprilTagID;
 
 
     @Override
@@ -128,13 +147,37 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+//second attempt at doing this
 
+            LLResult result = limelight.getLatestResult();
+////
+            if (result != null && result.isValid()) {
+                List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+
+                if (!fiducials.isEmpty()) {
+                    // Grab the first detected tag
+                    AprilTagID = fiducials.get(0).getFiducialId();
+
+                    telemetry.addData("Detected AprilTag", AprilTagID);
+                } else {
+                    telemetry.addLine("No AprilTags detected");
+                }
+            } else {
+                telemetry.addLine("Limelight: No valid results");
+            }
+            telemetry.update();
             /*
             Request an update from the Pinpoint odometry computer. This checks almost all outputs
             from the device in a single I2C read.
              */
             odo.update();
-
+            if (AprilTagID == 1) {
+                telemetry.addLine("Go Left");
+            } else if (AprilTagID == 2) {
+                telemetry.addLine("Go Center");
+            } else if (AprilTagID == 3) {
+                telemetry.addLine("Go Right");
+            }
             /*
             Optionally, you can update only the heading of the device. This takes less time to read, but will not
             pull any other data. Only the heading (which you can pull with getHeading() or in getPosition().

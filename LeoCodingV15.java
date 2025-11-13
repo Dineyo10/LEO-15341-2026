@@ -39,8 +39,8 @@ public class LeoCodingV15 extends LinearOpMode {
 
 //    private DcMotor launch;
 //    private DcMotor intake;
-    private CRServo Intake1;
-    private CRServo Intake2;
+//    private CRServo Intake1;
+//    private CRServo Intake2;
     private DcMotor Launch1;
     private DcMotor Launch2;
 
@@ -79,8 +79,8 @@ public class LeoCodingV15 extends LinearOpMode {
 //        intake= hardwareMap.get(DcMotor.class, "intake");
 
 
-        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
-        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
+//        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
+//        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
 
         Launch1 = hardwareMap.get(DcMotor.class, "Launch1");
         Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
@@ -96,7 +96,7 @@ public class LeoCodingV15 extends LinearOpMode {
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
         Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
-        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+//        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.REVERSE);
         Conveyor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -172,8 +172,8 @@ public class LeoCodingV15 extends LinearOpMode {
                 right_back.setPower((RB_Power) * .4);
             }
 
-         Intake1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
-         Intake2.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+//         Intake1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+//         Intake2.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
 
          Conveyor.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
 

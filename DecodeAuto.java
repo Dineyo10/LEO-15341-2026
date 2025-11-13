@@ -12,7 +12,6 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -31,16 +30,17 @@ public class DecodeAuto extends LinearOpMode {
     DcMotor rightFrontDrive;
     DcMotor leftBackDrive;
     DcMotor rightBackDrive;
-    private CRServo Intake1;
-    private CRServo Intake2;
+//    private CRServo Intake1;
+//    private CRServo Intake2;
     private DcMotor Launch1;
     private DcMotor Launch2;
+    private int AprilTagID;
 
     private DcMotor Conveyor;
 
     private CRServo Stopper;
 
-//    private Limelight3A limelight;
+    private Limelight3A limelight;
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
@@ -71,11 +71,11 @@ public class DecodeAuto extends LinearOpMode {
         DRIVE_TO_TARGET_20
     }
 
-    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,200,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, 500, 0, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,500,0, AngleUnit.DEGREES,00);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 500, -600, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -400, 950, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,0,0, AngleUnit.DEGREES,0);
+    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -1300, 800, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, -1300, 1200, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, -400, 1200, AngleUnit.DEGREES, 0);
@@ -107,8 +107,8 @@ public class DecodeAuto extends LinearOpMode {
         leftBackDrive   = hardwareMap.get(DcMotor.class, "left_back");
         rightBackDrive  = hardwareMap.get(DcMotor.class, "right_back");
 
-        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
-        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
+//        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
+//        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
 
         Launch1 = hardwareMap.get(DcMotor.class, "Launch1");
         Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
@@ -119,12 +119,15 @@ public class DecodeAuto extends LinearOpMode {
 
 
 
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.start();
 
+        limelight.pipelineSwitch(0);
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
         Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
-        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+//        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         Conveyor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -164,14 +167,65 @@ public class DecodeAuto extends LinearOpMode {
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
 
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+            List<FiducialResult> fiducials = result.getFiducialResults();
+
+            if (!fiducials.isEmpty()) {
+                // Grab the first detected tag
+                AprilTagID = fiducials.get(0).getFiducialId();
+
+                telemetry.addData("Detected AprilTag", AprilTagID);
+            } else {
+                telemetry.addLine("No AprilTags detected");
+            }
+        } else {
+            telemetry.addLine("Limelight: No valid results");
+        }
+        if(AprilTagID== 21){
+            telemetry.addLine("21");
+        }
+        if(AprilTagID== 22){
+            telemetry.addLine("22");
+        }
+        if(AprilTagID== 23){
+            telemetry.addLine("23");
+        }
+        telemetry.update();
+
         // Wait for the game to start (driver presses START)
         waitForStart();
         resetRuntime();
+////
 
         while (opModeIsActive()) {
             odo.update();
+            //first attempt at doing this
 //            LLResult result = limelight.getLatestResult();
 //
+//            if (result != null && result.isValid()) {
+//                List<FiducialResult> fiducials = result.getFiducialResults();
+//
+//                for (LLResultTypes.FiducialResult fiducial : fiducials) {
+//                    int AprilTagID = fiducial.getFiducialId();
+//
+//                    telemetry.addData("Detected Apriltag", AprilTagID);
+//                }
+//
+
+//second attempt at doing this
+
+
+
+
+
+////            telemetry.addData("TagId", );
+//            } else {
+//                telemetry.addData("Limelight", "No Targets");
+//            }
+//            telemetry.update();
+
 //            if (result != null && result.isValid()) {
 //                List<FiducialResult> fiducials = result.getFiducialResults();
 //
@@ -203,38 +257,47 @@ public class DecodeAuto extends LinearOpMode {
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
                     if (nav.driveTo(odo.getPosition(), TARGET_1, .7, 2)){
-                    Stopper.setPower(.3);
+//                    Stopper.setPower(.3);
                         telemetry.addLine("at position #1!");
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_2;
+                        if (AprilTagID==21) {
+                            stateMachine = StateMachine.DRIVE_TO_TARGET_2;
+                        }
+
+                        else if (AprilTagID==22) {
+                            stateMachine = StateMachine.DRIVE_TO_TARGET_3;
+                        }
+
+                        else {
+                            stateMachine = StateMachine.DRIVE_TO_TARGET_4;
+                        }
 //                        launch();
                     }
                     break;
                 case DRIVE_TO_TARGET_2:
                     //drive to the second target
                     if (nav.driveTo(odo.getPosition(), TARGET_2, .7, 2)){
-
+                    Stopper.setPower(.3);
 
                         telemetry.addLine("at position #2!");
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_3;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
                     }
 //                    sleep(30000);
                     break;
                 case DRIVE_TO_TARGET_3:
                     if(nav.driveTo(odo.getPosition(), TARGET_3, .7, 2)){
                         telemetry.addLine("at position #3");
-//                        swivelZero();
-//                        sleep(500);
+                        Launch1.setPower(.2);
 
 
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_4;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
                     }
                     break;
                 case DRIVE_TO_TARGET_4:
                     if(nav.driveTo(odo.getPosition(),TARGET_4,.7,2)){
                         telemetry.addLine("at position #4");
-
+                    Conveyor.setPower(.8);
 //                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
-                        stateMachine = StateMachine.AT_TARGET;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
 
                     }
                     break;
@@ -242,7 +305,7 @@ public class DecodeAuto extends LinearOpMode {
                     if(nav.driveTo(odo.getPosition(),TARGET_5,.7,0)){
                         telemetry.addLine("at position #5!");
 
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_6;
+                        stateMachine = StateMachine.AT_TARGET;
                     }
                     break;
                 case DRIVE_TO_TARGET_6:
