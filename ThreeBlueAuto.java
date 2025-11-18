@@ -70,9 +70,10 @@ public class ThreeBlueAuto extends LinearOpMode {
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
     static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, -760+67,0+56,AngleUnit.DEGREES,-90-21.46);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-760-67,-500-56,AngleUnit.DEGREES,-90-21.46);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -50-67,-50-56,AngleUnit.DEGREES,21.46-21.46);
-    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 0+67,0+56,AngleUnit.DEGREES,0-21.46);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-760-67,-750-56,AngleUnit.DEGREES,-90-21.46);
+    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -0-67,-20-56,AngleUnit.DEGREES,17.46-21.46);
+    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -600+67,0+56,AngleUnit.DEGREES,21.46-21.46);
+
     static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
     static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
     static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
@@ -199,7 +200,7 @@ public class ThreeBlueAuto extends LinearOpMode {
                     the robot has reached the target, and has been there for (holdTime) seconds.
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
-                    if (nav.driveTo(odo.getPosition(), TARGET_1, .7, 2)){
+                    if (nav.driveTo(odo.getPosition(), TARGET_1, .7, .1)){
                          launch();
                          telemetry.addLine("at position #1!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_2;
@@ -208,7 +209,7 @@ public class ThreeBlueAuto extends LinearOpMode {
                     break;
                 case DRIVE_TO_TARGET_2:
                     //drive to the second target
-                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, .5)){
+                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, .1)){
 
 intake();
                         telemetry.addLine("at position #2!");
@@ -217,11 +218,12 @@ intake();
 //                    sleep(30000);
                     break;
                 case DRIVE_TO_TARGET_3:
-                    if(nav.driveTo(odo.getPosition(), TARGET_3, .7, 1)){
+                    if(nav.driveTo(odo.getPosition(), TARGET_3, .7, .1)){
                         telemetry.addLine("at position #3");
 //                        swivelZero();
 //                        sleep(500);
-
+                        Launch1.setPower(.375);
+                        Launch2.setPower(.375);
 
                         stateMachine = StateMachine.DRIVE_TO_TARGET_4;
                     }
@@ -230,21 +232,21 @@ intake();
                     if(nav.driveTo(odo.getPosition(),TARGET_4,.7,0.1)){
                         telemetry.addLine("at position #4");
                         Stopintake();
-                        launch();
+                        launch2();
 //                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
-                        stateMachine = StateMachine.AT_TARGET;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
 
                     }
                     break;
                 case DRIVE_TO_TARGET_5:
-                    if(nav.driveTo(odo.getPosition(),TARGET_5,.7,0)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_5,1,2)){
                         telemetry.addLine("at position #5!");
 
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_6;
+                        stateMachine = StateMachine.AT_TARGET;
                     }
                     break;
                 case DRIVE_TO_TARGET_6:
-                    if(nav.driveTo(odo.getPosition(), TARGET_6, .7, 0)){
+                    if(nav.driveTo(odo.getPosition(), TARGET_6, .7, 10)){
 
                         telemetry.addLine("at position #6");
 //                        transfer();
@@ -324,8 +326,8 @@ intake();
     }
 
     public void launch(){
-        Launch1.setPower(.44);
-        Launch2.setPower(.44);
+        Launch1.setPower(.375);
+        Launch2.setPower(.375);
         sleep(4000);
         Stopper.setPower(1);
         sleep(3000);
@@ -349,6 +351,16 @@ intake();
         Stopper.setPower(0);
         Conveyor.setPower(0);
 
+    }
+    public void launch2(){
+        Launch1.setPower(.375);
+        Launch2.setPower(.375);
+        sleep(500);
+        Stopper.setPower(1);
+        sleep(1000);
+        Stopper.setPower(0);
+        Launch1.setPower(0);
+        Launch2.setPower(0);
     }
 
     public void intake(){

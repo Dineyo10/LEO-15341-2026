@@ -1,37 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-
 
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 //@Disabled
 @TeleOp
-public class LeoCodingV15 extends LinearOpMode {
+public class LeoCodingV15B extends LinearOpMode {
     private DcMotor left_drive;
     private DcMotor right_drive;
     private DcMotor left_back;
@@ -45,9 +24,6 @@ public class LeoCodingV15 extends LinearOpMode {
     private DcMotor Launch2;
 
     private DcMotor Conveyor;
-
-    private DcMotor test;
-
 
     private CRServo Stopper;
 
@@ -89,9 +65,6 @@ public class LeoCodingV15 extends LinearOpMode {
         Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
 
         Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
-
-        test = hardwareMap.get(DcMotor.class, "test");
-
 
         Stopper = hardwareMap.get(CRServo.class, "Stopper");
 
@@ -193,8 +166,6 @@ public class LeoCodingV15 extends LinearOpMode {
          else {
              Stopper.setPower(0);
          }
-
-
 //            if(gamepad2.y){
 //                Stopper.setPower(-1);
 //            }
@@ -213,8 +184,6 @@ public class LeoCodingV15 extends LinearOpMode {
                 Launch2.setPower(0);
             }
 
-
-            test.setPower(gamepad2.left_stick_y);
 //            if(gamepad2.x){
 //                Stopper.setPower(1);
 ////                Launch1.setPower(1);
