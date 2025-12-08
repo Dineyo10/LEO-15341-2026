@@ -25,28 +25,22 @@ import java.util.List;
 
 //@Disabled
 @TeleOp
-public class LeoCodingV15B extends LinearOpMode {
+public class LeoCodingV15C extends LinearOpMode {
     private DcMotor left_drive;
     private DcMotor right_drive;
     private DcMotor left_back;
     private DcMotor right_back;
 
-//    private DcMotor launch;
-//    private DcMotor intake;
-//    private CRServo Intake1;
-//    private CRServo Intake2;
-    private DcMotor Launch1;
-    private DcMotor Launch2;
-
-    private DcMotor Conveyor;
-
-    private DcMotor test;
+    private DcMotor intake;
+    private DcMotor Revolver;
+    private DcMotor Launch;
+//    private DcMotor test;
 
     private ColorSensor color;
-    private CRServo Stopper;
+//    private CRServo Stopper;
 
     private int AprilTagID;
-    private Limelight3A limelight;
+//    private Limelight3A limelight;
 
     private boolean team;
 
@@ -59,45 +53,45 @@ public class LeoCodingV15B extends LinearOpMode {
     public void runOpMode() {
 
 
-        left_drive = hardwareMap.get(DcMotor.class, "left_drive");
-        right_drive = hardwareMap.get(DcMotor.class, "right_drive");
-        left_back = hardwareMap.get(DcMotor.class, "left_back");
-        right_back = hardwareMap.get(DcMotor.class, "right_back");
+        left_drive = hardwareMap.get(DcMotor.class, "LD");
+        right_drive = hardwareMap.get(DcMotor.class, "RD");
+        left_back = hardwareMap.get(DcMotor.class, "LB");
+        right_back = hardwareMap.get(DcMotor.class, "RB");
 
 //        launch= hardwareMap.get(DcMotor.class, "launch");
 //
 //        intake= hardwareMap.get(DcMotor.class, "intake");
 
 
-//        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
-//        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        Revolver = hardwareMap.get(DcMotor.class, "Revolver");
 
-        Launch1 = hardwareMap.get(DcMotor.class, "Launch1");
-        Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
+        Launch = hardwareMap.get(DcMotor.class, "Launch");
+//        Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
 
-        Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
+//        Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
 
-        test = hardwareMap.get(DcMotor.class, "test");
+//        test = hardwareMap.get(DcMotor.class, "test");
 
-        Stopper = hardwareMap.get(CRServo.class, "Stopper");
+//        Stopper = hardwareMap.get(CRServo.class, "Stopper");
 
         color = hardwareMap.get(ColorSensor.class, "color");
 
 
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.start();
+//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+//        limelight.start();
 
-        limelight.pipelineSwitch(1);
+//        limelight.pipelineSwitch(1);
 
 
 //            if(limelight.)
 //        telemetry.addData("",limelight.updateRobotOrientation(50));
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
-        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
+//        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
 //        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.REVERSE);
-        Conveyor.setDirection(DcMotor.Direction.REVERSE);
+//        Conveyor.setDirection(DcMotor.Direction.REVERSE);
 
 
         telemetry.setMsTransmissionInterval(11);
@@ -114,8 +108,8 @@ public class LeoCodingV15B extends LinearOpMode {
         left_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_back.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Launch1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        cap.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        cap2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         YawPitchRollAngles robotOrientation;
@@ -125,10 +119,10 @@ public class LeoCodingV15B extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            float LF_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x));
-            float RF_Power=((-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x));
-            float LB_Power=((gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x));
-            float RB_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x));
+            float LF_Power=((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
+            float RF_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x));
+            float LB_Power=((-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x));
+            float RB_Power=((-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x));
 
             // mecanum code
             if (gamepad1.dpad_down) {
@@ -152,37 +146,24 @@ public class LeoCodingV15B extends LinearOpMode {
 
 
 
-         Conveyor.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+//            Conveyor.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
 
 
-         if(gamepad2.x){
-             Stopper.setPower(1);
-         }
-         else if(gamepad2.y){
-             Stopper.setPower(-1);
-         }
-         else {
-             Stopper.setPower(0);
-         }
 
-            if(gamepad2.dpad_up) {
-                Launch1.setPower(.41);
-                Launch2.setPower(.41);
+
+           if(gamepad2.dpad_up){
+               Launch.setPower(.45);
+           }
+            if(gamepad2.dpad_down){
+                Launch.setPower(.40);
             }
-            if(gamepad2.dpad_down) {
-                Launch1.setPower(.35);
-                Launch2.setPower(.35);
+            if(gamepad2.b){
+                Launch.setPower(0);
             }
 
-            if(gamepad2.b) {
-                Launch1.setPower(0);
-                Launch2.setPower(0);
-            }
-
-test.setPower(gamepad2.left_stick_y);
 
             if(color.blue()>color.green()&& color.blue()>100){
-               Color="purple";
+                Color="purple";
             }
             else if(color.green()>color.blue()&& color.green()>100){
                 Color="green";
@@ -191,18 +172,18 @@ test.setPower(gamepad2.left_stick_y);
                 Color="no artifact";
             }
 
-            LLResult result = limelight.getLatestResult();
+//            LLResult result = limelight.getLatestResult();
 
-            if (result != null && result.isValid()) {
-                List<FiducialResult> fiducials = result.getFiducialResults();
+//            if (result != null && result.isValid()) {
+//                List<FiducialResult> fiducials = result.getFiducialResults();
 
-                if (!fiducials.isEmpty()) {
+//                if (!fiducials.isEmpty()) {
                     // Grab the first detected tag
-                    AprilTagID = fiducials.get(0).getFiducialId();
+//                    AprilTagID = fiducials.get(0).getFiducialId();
 
 //                    telemetry.addData("Detected AprilTag", AprilTagID);
-                }
-            }
+//                }
+//            }
 
 //            if(result.getTx()>5){
 //                test.setPower(-.1);
@@ -214,18 +195,18 @@ test.setPower(gamepad2.left_stick_y);
 //               test.setPower(0);
 //            }
 
-if(gamepad2.left_stick_button){
-    team=true;
-}
+            if(gamepad2.left_stick_button){
+                team=true;
+            }
             if(gamepad2.right_stick_button){
                 team=false;
             }
             if(team) {
-                limelight.pipelineSwitch(1);
+//                limelight.pipelineSwitch(1);
                 Team="blue";
             }
             if(!team) {
-                limelight.pipelineSwitch(2);
+//                limelight.pipelineSwitch(2);
                 Team="red";
             }
 
@@ -243,7 +224,7 @@ if(gamepad2.left_stick_button){
             telemetry.addData("color:",Color);
 
             telemetry.addData("team:",Team);
-            telemetry.addData("x",result.getTx());
+//            telemetry.addData("x",result.getTx());
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());

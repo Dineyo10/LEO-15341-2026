@@ -404,7 +404,9 @@ public class OliverAuto extends LinearOpMode {
         Launch2.setPower(0);
         Stopper.setPower(0);
         Conveyor.setPower(0);
-
+    }
+    public void Intake(){
+        Conveyor.setPower(1);
 
     }
     public void launch(){
