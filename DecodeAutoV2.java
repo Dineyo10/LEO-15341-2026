@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.Math.PI;
 
+import com.qualcomm.hardware.lynx.commands.standard.LynxQueryInterfaceCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -13,6 +14,8 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -22,27 +25,39 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import java.util.List;
 import java.util.Locale;
 
-@Autonomous(name="DecodeAuto", group="Auto")
-@Disabled
+@Autonomous(name="DecodeAutoV2", group="Auto")
+//@Disabled
 
-public class DecodeAuto extends LinearOpMode {
+public class DecodeAutoV2 extends LinearOpMode {
 
-    DcMotor leftFrontDrive;
-    DcMotor rightFrontDrive;
-    DcMotor leftBackDrive;
-    DcMotor rightBackDrive;
-//    private CRServo Intake1;
-//    private CRServo Intake2;
-    private DcMotor Launch1;
-    private DcMotor Launch2;
+    private DcMotor leftFrontDrive;
+    private DcMotor rightFrontDrive;
+    private DcMotor leftBackDrive;
+    private DcMotor rightBackDrive;
+
+    private DcMotor intake;
+    private DcMotor Revolver;
+    private DcMotor Launch;
+
+    private Servo flick;
+
+    private CRServo side1;
+    private CRServo side2;
+    private ColorSensor color;
+
+
     private int AprilTagID;
-
-    private DcMotor Conveyor;
-
-    private CRServo Stopper;
-
     private Limelight3A limelight;
-//    private AprilTagProcessor aprilTag;
+
+    private boolean team;
+
+    private String Team;
+
+    private String Color;
+
+    int revolverpos;
+
+    //    private AprilTagProcessor aprilTag;
 //    private VisionPortal visionPortal;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
     DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
@@ -52,6 +67,10 @@ public class DecodeAuto extends LinearOpMode {
         AT_TARGET,
         DRIVE_TO_TARGET_1,
         DRIVE_TO_TARGET_2,
+
+        DRIVE_TO_TARGET_2_Left,
+        DRIVE_TO_TARGET_2_Center,
+        DRIVE_TO_TARGET_2_Right,
         DRIVE_TO_TARGET_3,
         DRIVE_TO_TARGET_4,
         DRIVE_TO_TARGET_5,
@@ -72,8 +91,13 @@ public class DecodeAuto extends LinearOpMode {
         DRIVE_TO_TARGET_20
     }
 
+
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,0,-500,AngleUnit.DEGREES,0);
+
+    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,0,0, AngleUnit.DEGREES,0);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
@@ -96,29 +120,37 @@ public class DecodeAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 //        limelight.start();
 
 //        limelight.pipelineSwitch(0);
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        leftBackDrive   = hardwareMap.get(DcMotor.class, "left_back");
-        rightBackDrive  = hardwareMap.get(DcMotor.class, "right_back");
 
-//        Intake1 = hardwareMap.get(CRServo.class, "Intake1");
-//        Intake2 = hardwareMap.get(CRServo.class, "Intake2");
+        intake = hardwareMap.get(DcMotor.class, "intake");
 
-        Launch1 = hardwareMap.get(DcMotor.class, "Launch1");
-        Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
+        Revolver = hardwareMap.get(DcMotor.class, "Revolver");
 
-        Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
+        Launch = hardwareMap.get(DcMotor.class, "Launch");
 
-        Stopper = hardwareMap.get(CRServo.class, "Stopper");
+        flick = hardwareMap.get(Servo.class, "flick");
 
 
+        color = hardwareMap.get(ColorSensor.class, "color");
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "LD");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "RD");
+        leftBackDrive   = hardwareMap.get(DcMotor.class, "LB");
+        rightBackDrive  = hardwareMap.get(DcMotor.class, "RB");
+
+
+        Launch = hardwareMap.get(DcMotor.class, "Launch");
+
+
+
+        side1 = hardwareMap.get(CRServo.class, "side1");
+
+        side2 = hardwareMap.get(CRServo.class, "side2");
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.start();
@@ -127,10 +159,14 @@ public class DecodeAuto extends LinearOpMode {
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
-        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
+//        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
 //        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        Conveyor.setDirection(DcMotor.Direction.REVERSE);
+//        Conveyor.setDirection(DcMotor.Direction.REVERSE);
+
+        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 //        leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 //        leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -142,8 +178,8 @@ public class DecodeAuto extends LinearOpMode {
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Launch1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
 
@@ -253,6 +289,8 @@ public class DecodeAuto extends LinearOpMode {
                     stateMachine = StateMachine.DRIVE_TO_TARGET_1;
                     break;
                 case DRIVE_TO_TARGET_1:
+                    launch1();
+
                     /*
                     drive the robot to the first target, the nav.driveTo function will return true once
                     the robot has reached the target, and has been there for (holdTime) seconds.
@@ -260,44 +298,63 @@ public class DecodeAuto extends LinearOpMode {
                      */
                     if (nav.driveTo(odo.getPosition(), TARGET_1, .7, 2)){
 //                    Stopper.setPower(.3);
+
                         telemetry.addLine("at position #1!");
-                        if (AprilTagID==21) {
-                            stateMachine = StateMachine.DRIVE_TO_TARGET_2;
-                        }
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_2;
 
-                        else if (AprilTagID==22) {
-                            stateMachine = StateMachine.DRIVE_TO_TARGET_3;
-                        }
-
-                        else {
-                            stateMachine = StateMachine.DRIVE_TO_TARGET_4;
-                        }
-//                        launch();
+//                        if (AprilTagID==21) {
+//                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Left;
+//                        }
+//                        else if (AprilTagID==22) {
+//                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Center;
+//                        }
+//                        else{
+//                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Right;
+//                        }
                     }
                     break;
                 case DRIVE_TO_TARGET_2:
-                    //drive to the second target
                     if (nav.driveTo(odo.getPosition(), TARGET_2, .7, 2)){
-                    Stopper.setPower(.3);
+//                        Intake();
+                        telemetry.addLine("at position #2!");
+                        stateMachine = StateMachine.AT_TARGET;
+                    }
+                    break;
+                case DRIVE_TO_TARGET_2_Left:
+                    if (nav.driveTo(odo.getPosition(), TARGET_2_Left, .7, 2)){
+                    Intake();
+                        telemetry.addLine("at position #2!");
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_3;
+                    }
+                case DRIVE_TO_TARGET_2_Center:
+                    if (nav.driveTo(odo.getPosition(), TARGET_2_Center, .7, 2)){
+//                        Stopper.setPower(.3);
+                        Intake();
 
                         telemetry.addLine("at position #2!");
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_3;
                     }
-//                    sleep(30000);
+                case DRIVE_TO_TARGET_2_Right:
+                    if (nav.driveTo(odo.getPosition(), TARGET_2_Right, .7, 2)){
+//                        Stopper.setPower(.3);
+                        Intake();
+
+                        telemetry.addLine("at position #2!");
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_3;
+                    }
                     break;
                 case DRIVE_TO_TARGET_3:
                     if(nav.driveTo(odo.getPosition(), TARGET_3, .7, 2)){
                         telemetry.addLine("at position #3");
-                        Launch1.setPower(.2);
 
 
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_4;
                     }
                     break;
                 case DRIVE_TO_TARGET_4:
                     if(nav.driveTo(odo.getPosition(),TARGET_4,.7,2)){
                         telemetry.addLine("at position #4");
-                    Conveyor.setPower(.8);
+//                        Conveyor.setPower(.8);
 //                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
                         stateMachine = StateMachine.DRIVE_TO_TARGET_5;
 
@@ -388,34 +445,47 @@ public class DecodeAuto extends LinearOpMode {
             telemetry.update();
 
         }
-    }
 
-    public void launch(){
-    Launch1.setPower(.41);
-    Launch2.setPower(.415);
-    sleep(4000);
-    Stopper.setPower(1);
-    sleep(3000);
-    Stopper.setPower(0);
-    sleep(3000);
-    Conveyor.setPower(1);
+    }
+private void launch1(){
+    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    Launch.setPower(.7);
+        side1.setPower(.9);
+        side2.setPower(.9);
+        flick.setPosition(.8);
+        sleep(500);
+        flick.setPosition(.3);
+        sleep(3000);
+    Revolver.setTargetPosition(600);
+    Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    Revolver.setPower(.8);
+    sleep(5000);
+    flick.setPosition(.8);
     sleep(500);
-    Stopper.setPower(1);
-    Conveyor.setPower(1);
-    sleep(500);
-    Conveyor.setPower(0);
-    sleep(2000);
-    Stopper.setPower(0);
-    sleep(2000);
-    Stopper.setPower(1);
-    sleep(2000);
-    Conveyor.setPower(1);
+    flick.setPosition(.3);
+    sleep(1000);
+    Revolver.setTargetPosition(1200);
+    Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    Revolver.setPower(.8);
+    sleep(5000);
+    flick.setPosition(.8);
     sleep(3000);
-    Launch1.setPower(0);
-    Launch2.setPower(0);
-    Stopper.setPower(0);
-    Conveyor.setPower(0);
+    flick.setPosition(.3);
+    Launch.setPower(0);
+    side2.setPower(0);
+    side1.setPower(0);
+}
+private void Intake() {
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setTargetPosition(600);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.8);
+        intake.setPower(.8);
+        sleep(500);
+    Revolver.setTargetPosition(1200);
+    Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    Revolver.setPower(.8);
 
     }
 
-    }
+}

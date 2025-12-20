@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-//@Disabled
+@Disabled
 @TeleOp
 public class LeoCodingV15 extends LinearOpMode {
     private DcMotor left_drive;
@@ -46,7 +46,6 @@ public class LeoCodingV15 extends LinearOpMode {
 
     private DcMotor Conveyor;
 
-    private DcMotor test;
 
 
     private CRServo Stopper;
@@ -90,7 +89,6 @@ public class LeoCodingV15 extends LinearOpMode {
 
         Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
 
-        test = hardwareMap.get(DcMotor.class, "test");
 
 
         Stopper = hardwareMap.get(CRServo.class, "Stopper");
@@ -214,7 +212,6 @@ public class LeoCodingV15 extends LinearOpMode {
             }
 
 
-            test.setPower(gamepad2.left_stick_y);
 //            if(gamepad2.x){
 //                Stopper.setPower(1);
 ////                Launch1.setPower(1);

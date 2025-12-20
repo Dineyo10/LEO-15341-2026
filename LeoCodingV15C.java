@@ -13,6 +13,8 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -23,6 +25,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
+import javax.sql.RowSetEvent;
+
 //@Disabled
 @TeleOp
 public class LeoCodingV15C extends LinearOpMode {
@@ -32,8 +36,12 @@ public class LeoCodingV15C extends LinearOpMode {
     private DcMotor right_back;
 
     private DcMotor intake;
+    private CRServo side1;
+    private CRServo side2;
     private DcMotor Revolver;
     private DcMotor Launch;
+
+    private Servo flick;
 //    private DcMotor test;
 
     private ColorSensor color;
@@ -47,6 +55,13 @@ public class LeoCodingV15C extends LinearOpMode {
     private String Team;
 
     private String Color;
+
+    int revolverpos;
+
+    boolean r=false;
+    boolean l=false;
+
+
 
 
     @Override
@@ -64,16 +79,23 @@ public class LeoCodingV15C extends LinearOpMode {
 
 
         intake = hardwareMap.get(DcMotor.class, "intake");
+
         Revolver = hardwareMap.get(DcMotor.class, "Revolver");
 
         Launch = hardwareMap.get(DcMotor.class, "Launch");
+
+        flick = hardwareMap.get(Servo.class, "flick");
+
 //        Launch2 = hardwareMap.get(DcMotor.class, "Launch2");
 
 //        Conveyor = hardwareMap.get(DcMotor.class, "Conveyor");
 
 //        test = hardwareMap.get(DcMotor.class, "test");
 
-//        Stopper = hardwareMap.get(CRServo.class, "Stopper");
+        side1 = hardwareMap.get(CRServo.class, "side1");
+
+        side2 = hardwareMap.get(CRServo.class, "side2");
+
 
         color = hardwareMap.get(ColorSensor.class, "color");
 
@@ -87,6 +109,11 @@ public class LeoCodingV15C extends LinearOpMode {
 //            if(limelight.)
 //        telemetry.addData("",limelight.updateRobotOrientation(50));
 
+        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
 //        color = hardwareMap.get(ColorSensor.class, "color");
 //        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
 //        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -94,7 +121,7 @@ public class LeoCodingV15C extends LinearOpMode {
 //        Conveyor.setDirection(DcMotor.Direction.REVERSE);
 
 
-        telemetry.setMsTransmissionInterval(11);
+//        telemetry.setMsTransmissionInterval(11);
 
 //        limelight.pipelineSwitch(0);
 
@@ -120,9 +147,9 @@ public class LeoCodingV15C extends LinearOpMode {
         while (opModeIsActive()) {
 
             float LF_Power=((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
-            float RF_Power=((gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x));
+            float RF_Power=((gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
             float LB_Power=((-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x));
-            float RB_Power=((-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x));
+            float RB_Power=((-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x));
 
             // mecanum code
             if (gamepad1.dpad_down) {
@@ -144,23 +171,107 @@ public class LeoCodingV15C extends LinearOpMode {
                 right_back.setPower((RB_Power) * .4);
             }
 
+//            Revolver.setPower(gamepad2.left_stick_y);
+//            int revolverpos= Revolver.getCurrentPosition();
+
+//            if(revolverpos> 300||revolverpos<-300 ){
+//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            }
+//            if(gamepad2.a){
+//                Revolver.setTargetPosition(revolverpos + 290);
+//                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                Revolver.setPower(.8);
+//            }
+//
+//
+//           else if(gamepad2.b){
+//                Revolver.setTargetPosition(revolverpos - 290);
+//                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                Revolver.setPower(.8);
+//            }
+
+//            else {
+//                Revolver.setPower(0);
+//                revolverpos= Revolver.getCurrentPosition();
+//            }
+
+            if(gamepad2.start){
+                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
 
 
-//            Conveyor.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+            if(gamepad2.b){
+                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                r=true;
+            }
+
+            if(r){
+                Revolver.setTargetPosition(-290);
+                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Revolver.setPower(.8);
+            }
+
+            if(r && Revolver.getCurrentPosition() <= - 295 &&
+                    Revolver.getCurrentPosition() >= - 285 ){
+                r=false;
+            }
+
+            if(gamepad2.a){
+                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                l=true;
+            }
+
+            if(l){
+                Revolver.setTargetPosition(290);
+                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Revolver.setPower(.8);
+            }
+
+            if(l && Revolver.getCurrentPosition() >= revolverpos + 285 &&
+                    Revolver.getCurrentPosition() <= revolverpos + 295 ){
+                l=false;
+            }
+
+        if(gamepad2.right_bumper){
+            flick.setPosition(.8);
+        }
+        else if(gamepad2.a ||gamepad2.b){
+            flick.setPosition(0.3);
+        }
+            else{
+                flick.setPosition(0.3);
+            }
+
+            intake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+
+
+//            Launch.setPower(gamepad2.left_stick_y);
 
 
 
 
-           if(gamepad2.dpad_up){
-               Launch.setPower(.45);
+
+            if(gamepad2.dpad_up){
+                side1.setPower(-.9);
+                side2.setPower(.5);
+               Launch.setPower(.9);
            }
             if(gamepad2.dpad_down){
-                Launch.setPower(.40);
+                side1.setPower(-.9);
+                side2.setPower(.5);
+                Launch.setPower(.60);
             }
-            if(gamepad2.b){
+            if(gamepad2.y){
+                side1.setPower(0);
+                side2.setPower(0);
                 Launch.setPower(0);
             }
 
+            if(gamepad2.left_bumper){
+                Launch.setPower(-.5);
+                side1.setPower(.9);
+                side2.setPower(-.5);
+            }
 
             if(color.blue()>color.green()&& color.blue()>100){
                 Color="purple";
@@ -201,6 +312,7 @@ public class LeoCodingV15C extends LinearOpMode {
             if(gamepad2.right_stick_button){
                 team=false;
             }
+
             if(team) {
 //                limelight.pipelineSwitch(1);
                 Team="blue";
@@ -211,19 +323,20 @@ public class LeoCodingV15C extends LinearOpMode {
             }
 
 
-
-
             telemetry.update();
 
             telemetry.addData("Detected AprilTag", AprilTagID);
 
-//            telemetry.addData("BlueValue", color.blue());
-//            telemetry.addData("RedValue",  color.red());
-//            telemetry.addData("GreenValue",  color.green());
+            telemetry.addData("BlueValue", color.blue());
+            telemetry.addData("RedValue",  color.red());
+            telemetry.addData("GreenValue",  color.green());
 //            telemetry.addData("argb",  color.argb());
             telemetry.addData("color:",Color);
 
             telemetry.addData("team:",Team);
+
+            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
+
 //            telemetry.addData("x",result.getTx());
             telemetry.update();
 

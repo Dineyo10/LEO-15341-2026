@@ -1,31 +1,24 @@
 package org.firstinspires.ftc.teamcode;
 
-import static java.lang.Math.PI;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.hardware.limelightvision.LLResult;
-//import com.qualcomm.hardware.limelightvision.Fiducial;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.util.List;
 import java.util.Locale;
-
-@Autonomous(name="DecodeAuto", group="Auto")
 @Disabled
 
-public class DecodeAuto extends LinearOpMode {
+@Autonomous
+
+public class Meet1Blue extends LinearOpMode {
 
     DcMotor leftFrontDrive;
     DcMotor rightFrontDrive;
@@ -35,18 +28,19 @@ public class DecodeAuto extends LinearOpMode {
 //    private CRServo Intake2;
     private DcMotor Launch1;
     private DcMotor Launch2;
-    private int AprilTagID;
 
     private DcMotor Conveyor;
 
     private CRServo Stopper;
 
-    private Limelight3A limelight;
-//    private AprilTagProcessor aprilTag;
-//    private VisionPortal visionPortal;
+
+
+//    private Limelight3A limelight;
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
     DriveToPoint nav = new DriveToPoint(this); //OpMode member for the point-to-point navigation class
-
+    //starting point alinged with the middle of the back wall is -45, -40, 14.5
     enum StateMachine {
         WAITING_FOR_START,
         AT_TARGET,
@@ -71,18 +65,22 @@ public class DecodeAuto extends LinearOpMode {
         DRIVE_TO_TARGET_19,
         DRIVE_TO_TARGET_20
     }
+    double xStart =-67;
+    double yStart =-56;
+    double rStart =21.46;
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,0,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,0,0, AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -1300, 800, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, -1300, 1200, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, -400, 1200, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_9 = new Pose2D(DistanceUnit.MM, -1300, 1200, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_10 = new Pose2D(DistanceUnit.MM, -1300, 1350, AngleUnit.DEGREES, 0);
-    static final Pose2D TARGET_11 = new Pose2D(DistanceUnit.MM, -400, 1350, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM, -760+67,0+56,AngleUnit.DEGREES,-90-21.46);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-760-67,-750-56,AngleUnit.DEGREES,-90-21.46);
+    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -0-67,-20-56,AngleUnit.DEGREES,17.46-21.46);
+    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -600+67,0+56,AngleUnit.DEGREES,21.46-21.46);
+
+    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
+    static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
+    static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
+    static final Pose2D TARGET_9 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
+    static final Pose2D TARGET_10 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
+    static final Pose2D TARGET_11 = new Pose2D(DistanceUnit.MM, 200+67,0+56,AngleUnit.DEGREES,0-21.46);
     static final Pose2D TARGET_12 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_13 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_14 = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
@@ -120,10 +118,7 @@ public class DecodeAuto extends LinearOpMode {
 
 
 
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.start();
 
-        limelight.pipelineSwitch(0);
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
@@ -168,66 +163,14 @@ public class DecodeAuto extends LinearOpMode {
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
 
-        LLResult result = limelight.getLatestResult();
-
-        if (result != null && result.isValid()) {
-            List<FiducialResult> fiducials = result.getFiducialResults();
-
-            if (!fiducials.isEmpty()) {
-                // Grab the first detected tag
-                AprilTagID = fiducials.get(0).getFiducialId();
-
-                telemetry.addData("Detected AprilTag", AprilTagID);
-            } else {
-                telemetry.addLine("No AprilTags detected");
-            }
-        } else {
-            telemetry.addLine("Limelight: No valid results");
-        }
-
-        if(AprilTagID== 21){
-            telemetry.addLine("21");
-        }
-        if(AprilTagID== 22){
-            telemetry.addLine("22");
-        }
-        if(AprilTagID== 23){
-            telemetry.addLine("23");
-        }
-        telemetry.update();
-
         // Wait for the game to start (driver presses START)
         waitForStart();
         resetRuntime();
-////
 
         while (opModeIsActive()) {
             odo.update();
-            //first attempt at doing this
 //            LLResult result = limelight.getLatestResult();
 //
-//            if (result != null && result.isValid()) {
-//                List<FiducialResult> fiducials = result.getFiducialResults();
-//
-//                for (LLResultTypes.FiducialResult fiducial : fiducials) {
-//                    int AprilTagID = fiducial.getFiducialId();
-//
-//                    telemetry.addData("Detected Apriltag", AprilTagID);
-//                }
-//
-
-//second attempt at doing this
-
-
-
-
-
-////            telemetry.addData("TagId", );
-//            } else {
-//                telemetry.addData("Limelight", "No Targets");
-//            }
-//            telemetry.update();
-
 //            if (result != null && result.isValid()) {
 //                List<FiducialResult> fiducials = result.getFiducialResults();
 //
@@ -258,60 +201,53 @@ public class DecodeAuto extends LinearOpMode {
                     the robot has reached the target, and has been there for (holdTime) seconds.
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
-                    if (nav.driveTo(odo.getPosition(), TARGET_1, .7, 2)){
-//                    Stopper.setPower(.3);
-                        telemetry.addLine("at position #1!");
-                        if (AprilTagID==21) {
-                            stateMachine = StateMachine.DRIVE_TO_TARGET_2;
-                        }
-
-                        else if (AprilTagID==22) {
-                            stateMachine = StateMachine.DRIVE_TO_TARGET_3;
-                        }
-
-                        else {
-                            stateMachine = StateMachine.DRIVE_TO_TARGET_4;
-                        }
+                    if (nav.driveTo(odo.getPosition(), TARGET_1, .7, .1)){
+                         launch();
+                         telemetry.addLine("at position #1!");
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_2;
 //                        launch();
                     }
                     break;
                 case DRIVE_TO_TARGET_2:
                     //drive to the second target
-                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, 2)){
-                    Stopper.setPower(.3);
+                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, .1)){
 
+intake();
                         telemetry.addLine("at position #2!");
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_3;
                     }
 //                    sleep(30000);
                     break;
                 case DRIVE_TO_TARGET_3:
-                    if(nav.driveTo(odo.getPosition(), TARGET_3, .7, 2)){
+                    if(nav.driveTo(odo.getPosition(), TARGET_3, .7, .1)){
                         telemetry.addLine("at position #3");
-                        Launch1.setPower(.2);
+//                        swivelZero();
+//                        sleep(500);
+                        Launch1.setPower(.375);
+                        Launch2.setPower(.375);
 
-
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_4;
                     }
                     break;
                 case DRIVE_TO_TARGET_4:
-                    if(nav.driveTo(odo.getPosition(),TARGET_4,.7,2)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_4,.7,0.1)){
                         telemetry.addLine("at position #4");
-                    Conveyor.setPower(.8);
+                        Stopintake();
+                        launch2();
 //                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
                         stateMachine = StateMachine.DRIVE_TO_TARGET_5;
 
                     }
                     break;
                 case DRIVE_TO_TARGET_5:
-                    if(nav.driveTo(odo.getPosition(),TARGET_5,.7,0)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_5,1,2)){
                         telemetry.addLine("at position #5!");
 
                         stateMachine = StateMachine.AT_TARGET;
                     }
                     break;
                 case DRIVE_TO_TARGET_6:
-                    if(nav.driveTo(odo.getPosition(), TARGET_6, .7, 0)){
+                    if(nav.driveTo(odo.getPosition(), TARGET_6, .7, 10)){
 
                         telemetry.addLine("at position #6");
 //                        transfer();
@@ -391,31 +327,47 @@ public class DecodeAuto extends LinearOpMode {
     }
 
     public void launch(){
-    Launch1.setPower(.41);
-    Launch2.setPower(.415);
-    sleep(4000);
-    Stopper.setPower(1);
-    sleep(3000);
-    Stopper.setPower(0);
-    sleep(3000);
-    Conveyor.setPower(1);
-    sleep(500);
-    Stopper.setPower(1);
-    Conveyor.setPower(1);
-    sleep(500);
-    Conveyor.setPower(0);
-    sleep(2000);
-    Stopper.setPower(0);
-    sleep(2000);
-    Stopper.setPower(1);
-    sleep(2000);
-    Conveyor.setPower(1);
-    sleep(3000);
-    Launch1.setPower(0);
-    Launch2.setPower(0);
-    Stopper.setPower(0);
-    Conveyor.setPower(0);
+        Launch1.setPower(.375);
+        Launch2.setPower(.375);
+        sleep(4000);
+        Stopper.setPower(1);
+        sleep(3000);
+        Stopper.setPower(0);
+        sleep(3000);
+        Conveyor.setPower(1);
+        sleep(500);
+        Stopper.setPower(1);
+        Conveyor.setPower(1);
+        sleep(500);
+        Conveyor.setPower(0);
+        sleep(2000);
+        Stopper.setPower(0);
+        sleep(1000);
+//        Stopper.setPower(1);
+//        sleep(2000);
+//        Conveyor.setPower(1);
+//        sleep(3000);
+        Launch1.setPower(0);
+        Launch2.setPower(0);
+        Stopper.setPower(0);
+        Conveyor.setPower(0);
 
     }
+    public void launch2(){
+        Launch1.setPower(.375);
+        Launch2.setPower(.375);
+        sleep(500);
+        Stopper.setPower(1);
+        sleep(1000);
+        Stopper.setPower(0);
+        Launch1.setPower(0);
+        Launch2.setPower(0);
+    }
 
+    public void intake(){
+        Conveyor.setPower(1);
+    }
+    public void Stopintake(){
+        Conveyor.setPower(0);
+    }
     }

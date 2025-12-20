@@ -93,6 +93,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
@@ -102,7 +103,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
         backwards is a negative number.
          */
-        odo.setOffsets(-190.5, -13.49375); //these are tuned for 3110-0002-0001 Product Insight #1
+        odo.setOffsets(180, 20); //these are tuned for 3110-0002-0001 Product Insight #1
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
@@ -111,7 +112,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         number of ticks per mm of your odometry pod.
          */
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        //odo.setEncoderResolution(13.26291192);
+//        odo.setEncoderResolution(13.26291192);
 
 
         /*
@@ -119,7 +120,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         increase when you move the robot forward. And the Y (strafe) pod should increase when
         you move the robot to the left.
          */
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
 
         /*
@@ -149,35 +150,35 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         while (opModeIsActive()) {
 //second attempt at doing this
 
-            LLResult result = limelight.getLatestResult();
-////
-            if (result != null && result.isValid()) {
-                List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
-
-                if (!fiducials.isEmpty()) {
-                    // Grab the first detected tag
-                    AprilTagID = fiducials.get(0).getFiducialId();
-
-                    telemetry.addData("Detected AprilTag", AprilTagID);
-                } else {
-                    telemetry.addLine("No AprilTags detected");
-                }
-            } else {
-                telemetry.addLine("Limelight: No valid results");
-            }
+//            LLResult result = limelight.getLatestResult();
+//////
+//            if (result != null && result.isValid()) {
+//                List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+//
+//                if (!fiducials.isEmpty()) {
+//                    // Grab the first detected tag
+//                    AprilTagID = fiducials.get(0).getFiducialId();
+//
+//                    telemetry.addData("Detected AprilTag", AprilTagID);
+//                } else {
+//                    telemetry.addLine("No AprilTags detected");
+//                }
+//            } else {
+//                telemetry.addLine("Limelight: No valid results");
+//            }
             telemetry.update();
             /*
             Request an update from the Pinpoint odometry computer. This checks almost all outputs
             from the device in a single I2C read.
              */
-            odo.update();
-            if (AprilTagID == 1) {
-                telemetry.addLine("Go Left");
-            } else if (AprilTagID == 2) {
-                telemetry.addLine("Go Center");
-            } else if (AprilTagID == 3) {
-                telemetry.addLine("Go Right");
-            }
+//            odo.update();
+//            if (AprilTagID == 1) {
+//                telemetry.addLine("Go Left");
+//            } else if (AprilTagID == 2) {
+//                telemetry.addLine("Go Center");
+//            } else if (AprilTagID == 3) {
+//                telemetry.addLine("Go Right");
+//            }
             /*
             Optionally, you can update only the heading of the device. This takes less time to read, but will not
             pull any other data. Only the heading (which you can pull with getHeading() or in getPosition().
