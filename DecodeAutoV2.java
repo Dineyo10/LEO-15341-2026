@@ -43,7 +43,7 @@ public class DecodeAutoV2 extends LinearOpMode {
 
     private CRServo side1;
     private CRServo side2;
-    private ColorSensor color;
+//    private ColorSensor color;
 
 
     private int AprilTagID;
@@ -137,7 +137,7 @@ public class DecodeAutoV2 extends LinearOpMode {
         flick = hardwareMap.get(Servo.class, "flick");
 
 
-        color = hardwareMap.get(ColorSensor.class, "color");
+//        color = hardwareMap.get(ColorSensor.class, "color");
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "LD");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "RD");
         leftBackDrive   = hardwareMap.get(DcMotor.class, "LB");

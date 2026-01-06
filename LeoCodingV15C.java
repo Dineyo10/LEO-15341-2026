@@ -44,7 +44,7 @@ public class LeoCodingV15C extends LinearOpMode {
     private Servo flick;
 //    private DcMotor test;
 
-    private ColorSensor color;
+//    private ColorSensor color;
 //    private CRServo Stopper;
 
     private int AprilTagID;
@@ -97,7 +97,7 @@ public class LeoCodingV15C extends LinearOpMode {
         side2 = hardwareMap.get(CRServo.class, "side2");
 
 
-        color = hardwareMap.get(ColorSensor.class, "color");
+//        color = hardwareMap.get(ColorSensor.class, "color");
 
 
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -273,15 +273,15 @@ public class LeoCodingV15C extends LinearOpMode {
                 side2.setPower(-.5);
             }
 
-            if(color.blue()>color.green()&& color.blue()>100){
-                Color="purple";
-            }
-            else if(color.green()>color.blue()&& color.green()>100){
-                Color="green";
-            }
-            else if(color.red()>color.blue()&& color.red()>color.green()&& color.red()>100){
-                Color="no artifact";
-            }
+//            if(color.blue()>color.green()&& color.blue()>100){
+//                Color="purple";
+//            }
+//            else if(color.green()>color.blue()&& color.green()>100){
+//                Color="green";
+//            }
+//            else if(color.red()>color.blue()&& color.red()>color.green()&& color.red()>100){
+//                Color="no artifact";
+//            }
 
 //            LLResult result = limelight.getLatestResult();
 
@@ -327,9 +327,9 @@ public class LeoCodingV15C extends LinearOpMode {
 
             telemetry.addData("Detected AprilTag", AprilTagID);
 
-            telemetry.addData("BlueValue", color.blue());
-            telemetry.addData("RedValue",  color.red());
-            telemetry.addData("GreenValue",  color.green());
+//            telemetry.addData("BlueValue", color.blue());
+//            telemetry.addData("RedValue",  color.red());
+//            telemetry.addData("GreenValue",  color.green());
 //            telemetry.addData("argb",  color.argb());
             telemetry.addData("color:",Color);
 

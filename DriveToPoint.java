@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -40,7 +38,7 @@ public class DriveToPoint {
         IN_BOUNDS
     }
 
-    private static double xyTolerance = 25;
+    private static double xyTolerance = 12;
     private static double yawTolerance = 0.0349066;
 
     private static double pGain = 0.008;
@@ -138,7 +136,7 @@ public class DriveToPoint {
             calculateTankOutput(xPWR * power, hPWR * power);
 
 
-            //Mecanum Drive Code:
+        //Mecanum Drive Code:
         } else {
             double xPWR = calculatePID(currentPosition, targetPosition, Direction.x);
             double yPWR = calculatePID(currentPosition, targetPosition, Direction.y);
@@ -169,10 +167,10 @@ public class DriveToPoint {
     }
 
     private void calculateMecanumOutput(double forward, double strafe, double yaw) {
-        double leftFront = -forward + strafe + yaw;
-        double rightFront = forward + strafe + yaw;
-        double leftBack = -forward - strafe + yaw;
-        double rightBack = -forward + strafe - yaw;
+        double leftFront = forward + -strafe + yaw;
+        double rightFront = -forward + -strafe + yaw;
+        double leftBack = -forward - -strafe + yaw;
+        double rightBack = -forward + -strafe - yaw;
 
         double max = Math.max(Math.abs(leftFront), Math.abs(rightFront));
         max = Math.max(max, Math.abs(leftBack));
