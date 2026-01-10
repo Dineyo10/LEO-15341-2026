@@ -109,7 +109,7 @@ public class LeoCodingV15C extends LinearOpMode {
 //            if(limelight.)
 //        telemetry.addData("",limelight.updateRobotOrientation(50));
 
-        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 //        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -171,75 +171,53 @@ public class LeoCodingV15C extends LinearOpMode {
                 right_back.setPower((RB_Power) * .4);
             }
 
-//            Revolver.setPower(gamepad2.left_stick_y);
-//            int revolverpos= Revolver.getCurrentPosition();
-
-//            if(revolverpos> 300||revolverpos<-300 ){
-//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            Revolver.setPower((gamepad2.left_stick_y)*.6);
+//
+//            if(gamepad2.start){
+//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            }
+//
+//
+//            if(gamepad2.b){
+//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                r=true;
+//            }
+//
+//            if(r){
+//                Revolver.setTargetPosition(320);
+//                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                Revolver.setPower(.8);
+//            }
+//
+//            if(r && Revolver.getCurrentPosition() >= revolverpos + 315 &&
+//                    Revolver.getCurrentPosition() <= revolverpos + 325 ){
+//                r=false;
+//            }
+//
 //            if(gamepad2.a){
-//                Revolver.setTargetPosition(revolverpos + 290);
+//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                l=true;
+//            }
+//
+//            if(l){
+//                Revolver.setTargetPosition(160);
 //                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                Revolver.setPower(.8);
 //            }
 //
-//
-//           else if(gamepad2.b){
-//                Revolver.setTargetPosition(revolverpos - 290);
-//                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                Revolver.setPower(.8);
+//            if(l && Revolver.getCurrentPosition() >= revolverpos + 155 &&
+//                    Revolver.getCurrentPosition() <= revolverpos + 165 ){
+//                l=false;
 //            }
-
-//            else {
-//                Revolver.setPower(0);
-//                revolverpos= Revolver.getCurrentPosition();
-//            }
-
-            if(gamepad2.start){
-                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-
-
-            if(gamepad2.b){
-                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                r=true;
-            }
-
-            if(r){
-                Revolver.setTargetPosition(-290);
-                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Revolver.setPower(.8);
-            }
-
-            if(r && Revolver.getCurrentPosition() <= - 295 &&
-                    Revolver.getCurrentPosition() >= - 285 ){
-                r=false;
-            }
-
-            if(gamepad2.a){
-                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                l=true;
-            }
-
-            if(l){
-                Revolver.setTargetPosition(290);
-                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Revolver.setPower(.8);
-            }
-
-            if(l && Revolver.getCurrentPosition() >= revolverpos + 285 &&
-                    Revolver.getCurrentPosition() <= revolverpos + 295 ){
-                l=false;
-            }
 
         if(gamepad2.right_bumper){
-            flick.setPosition(.8);
+            flick.setPosition(0.7);
         }
         else if(gamepad2.a ||gamepad2.b){
-            flick.setPosition(0.3);
+            flick.setPosition(0.45);
         }
             else{
-                flick.setPosition(0.3);
+                flick.setPosition(.45);
             }
 
             intake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
@@ -252,14 +230,15 @@ public class LeoCodingV15C extends LinearOpMode {
 
 
             if(gamepad2.dpad_up){
-                side1.setPower(-.9);
-                side2.setPower(.5);
                Launch.setPower(.9);
            }
-            if(gamepad2.dpad_down){
+            if(gamepad2.dpad_right){
                 side1.setPower(-.9);
-                side2.setPower(.5);
-                Launch.setPower(.60);
+                side2.setPower(.9);
+            }
+
+            if(gamepad2.dpad_down){
+                Launch.setPower(.6);
             }
             if(gamepad2.y){
                 side1.setPower(0);
@@ -267,10 +246,11 @@ public class LeoCodingV15C extends LinearOpMode {
                 Launch.setPower(0);
             }
 
+            //backward button
             if(gamepad2.left_bumper){
                 Launch.setPower(-.5);
                 side1.setPower(.9);
-                side2.setPower(-.5);
+                side2.setPower(-.9);
             }
 
 //            if(color.blue()>color.green()&& color.blue()>100){
@@ -282,16 +262,16 @@ public class LeoCodingV15C extends LinearOpMode {
 //            else if(color.red()>color.blue()&& color.red()>color.green()&& color.red()>100){
 //                Color="no artifact";
 //            }
-
+//
 //            LLResult result = limelight.getLatestResult();
-
+//
 //            if (result != null && result.isValid()) {
 //                List<FiducialResult> fiducials = result.getFiducialResults();
-
+//
 //                if (!fiducials.isEmpty()) {
-                    // Grab the first detected tag
+////                     Grab the first detected tag
 //                    AprilTagID = fiducials.get(0).getFiducialId();
-
+//
 //                    telemetry.addData("Detected AprilTag", AprilTagID);
 //                }
 //            }
@@ -338,6 +318,8 @@ public class LeoCodingV15C extends LinearOpMode {
             telemetry.addData("Revolver:", Revolver.getCurrentPosition());
 
 //            telemetry.addData("x",result.getTx());
+//              telemetry.addData("x",result.get;
+
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());

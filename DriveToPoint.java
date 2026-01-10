@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.RADIANS;
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.MM;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -38,7 +40,7 @@ public class DriveToPoint {
         IN_BOUNDS
     }
 
-    private static double xyTolerance = 12;
+    private static double xyTolerance = 25;
     private static double yawTolerance = 0.0349066;
 
     private static double pGain = 0.008;
@@ -124,19 +126,19 @@ public class DriveToPoint {
 //            if (inBounds(currentPosition,temp) == InBounds.IN_X_Y){
 //                xPWR = 0;
 //                hPWR = calculatePID(currentPosition,targetPosition,Direction.h);
-
+//
 //            if(inBounds(currentPosition,temp) == InBounds.IN_HEADING) {
 //                xPWR = xTankPID.calculateAxisPID(lengthToTarget,pGain,dGain,accel,currentTime.time());
 //                hPWR = calculatePID(currentPosition, temp, Direction.h);
-//
+////
 //            } else {
 //                xPWR = 0;
 //                hPWR = calculatePID(currentPosition, temp, Direction.h);
 //            }
-            calculateTankOutput(xPWR * power, hPWR * power);
+//            calculateTankOutput(xPWR * power, hPWR * power);
 
 
-        //Mecanum Drive Code:
+            //Mecanum Drive Code:
         } else {
             double xPWR = calculatePID(currentPosition, targetPosition, Direction.x);
             double yPWR = calculatePID(currentPosition, targetPosition, Direction.y);
@@ -167,27 +169,26 @@ public class DriveToPoint {
     }
 
     private void calculateMecanumOutput(double forward, double strafe, double yaw) {
-        double leftFront = forward + -strafe + yaw;
-        double rightFront = -forward + -strafe + yaw;
-        double leftBack = -forward - -strafe + yaw;
-        double rightBack = -forward + -strafe - yaw;
+        double leftFront  = -forward - strafe + yaw;
+        double rightFront = -forward + strafe - yaw;
+        double leftBack   = -forward + strafe + yaw;
+        double rightBack  = -forward - strafe - yaw;
 
+        // Normalizing powers
         double max = Math.max(Math.abs(leftFront), Math.abs(rightFront));
         max = Math.max(max, Math.abs(leftBack));
         max = Math.max(max, Math.abs(rightBack));
 
         if (max > 1.0) {
-            leftFront /= max;
-            rightFront /= max;
-            leftBack /= max;
-            rightBack /= max;
+            leftFront /= max; rightFront /= max; leftBack /= max; rightBack /= max;
         }
 
-        leftFrontMotorOutput  = leftFront;
+        leftFrontMotorOutput = leftFront;
         rightFrontMotorOutput = rightFront;
-        leftBackMotorOutput   = leftBack;
-        rightBackMotorOutput  = rightBack;
+        leftBackMotorOutput = leftBack;
+        rightBackMotorOutput = rightBack;
     }
+
 
     private void calculateTankOutput(double forward, double yaw){
         double left = forward - yaw;
