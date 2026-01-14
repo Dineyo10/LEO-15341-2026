@@ -13,6 +13,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -27,9 +28,10 @@ import java.util.List;
 
 import javax.sql.RowSetEvent;
 
+//this is for the meet 3 bot between meet 3 and 4
 //@Disabled
 @TeleOp
-public class LeoCodingV15C extends LinearOpMode {
+public class LeoCodingV15D extends LinearOpMode {
     private DcMotor left_drive;
     private DcMotor right_drive;
     private DcMotor left_back;
@@ -42,6 +44,8 @@ public class LeoCodingV15C extends LinearOpMode {
     private DcMotor Launch;
 
     private Servo flick;
+    private DistanceSensor Distance;
+
 //    private DcMotor test;
 
 //    private ColorSensor color;
@@ -98,6 +102,7 @@ public class LeoCodingV15C extends LinearOpMode {
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
+        Distance = hardwareMap.get(DistanceSensor.class, "Distance");
 
 
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -175,7 +180,7 @@ public class LeoCodingV15C extends LinearOpMode {
             //manual control of revolver
             Revolver.setPower((gamepad2.left_stick_y)*.6);
 //
-             //reset revolver encoder
+            //reset revolver encoder
             if(gamepad2.start){
                 Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
@@ -214,13 +219,13 @@ public class LeoCodingV15C extends LinearOpMode {
 //            }
 
             //flick control
-        if(gamepad2.right_bumper){
-            flick.setPosition(0.7);
-        }
-        else if(gamepad2.a ||gamepad2.b){
-            flick.setPosition(0.45);
-        }
-        //flick stays out when button not pressed
+            if(gamepad2.right_bumper){
+                flick.setPosition(0.7);
+            }
+            else if(gamepad2.a ||gamepad2.b){
+                flick.setPosition(0.45);
+            }
+            //flick stays out when button not pressed
             else{
                 flick.setPosition(.45);
             }
@@ -235,8 +240,8 @@ public class LeoCodingV15C extends LinearOpMode {
 
             //let launch speed up then turn on side motors
             if(gamepad2.dpad_up){
-               Launch.setPower(.9);
-           }
+                Launch.setPower(.9);
+            }
             //turns on motors to bring artifact to launch
             if(gamepad2.dpad_right){
                 side1.setPower(-.9);
@@ -293,24 +298,24 @@ public class LeoCodingV15C extends LinearOpMode {
 //               test.setPower(0);
 //            }
 
-            if(gamepad2.left_stick_button){
-                team=true;
-            }
-            if(gamepad2.right_stick_button){
-                team=false;
-            }
-
-            if(team) {
-//                limelight.pipelineSwitch(1);
-                Team="blue";
-            }
-            if(!team) {
-//                limelight.pipelineSwitch(2);
-                Team="red";
-            }
-
-
-            telemetry.update();
+//            if(gamepad2.left_stick_button){
+//                team=true;
+//            }
+//            if(gamepad2.right_stick_button){
+//                team=false;
+//            }
+//
+//            if(team) {
+////                limelight.pipelineSwitch(1);
+//                Team="blue";
+//            }
+//            if(!team) {
+////                limelight.pipelineSwitch(2);
+//                Team="red";
+//            }
+//
+//
+//            telemetry.update();
 
             telemetry.addData("Detected AprilTag", AprilTagID);
 
