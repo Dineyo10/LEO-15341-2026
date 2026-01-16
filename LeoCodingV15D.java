@@ -240,29 +240,29 @@ public class LeoCodingV15D extends LinearOpMode {
 
             //let launch speed up then turn on side motors
             if(gamepad2.dpad_up){
-                Launch.setPower(.9);
+                Launch.setPower(.7);
             }
             //turns on motors to bring artifact to launch
-            if(gamepad2.dpad_right){
-                side1.setPower(-.9);
-                side2.setPower(.9);
-            }
+//            if(gamepad2.dpad_right){
+//                side1.setPower(-.9);
+//                side2.setPower(.9);
+//            }
             //slow speed used more often
             if(gamepad2.dpad_down){
-                Launch.setPower(.6);
+                Launch.setPower(.52);
             }
             //stop launch
             if(gamepad2.y){
-                side1.setPower(0);
-                side2.setPower(0);
+//                side1.setPower(0);
+//                side2.setPower(0);
                 Launch.setPower(0);
             }
 
             //backward launch button
             if(gamepad2.left_bumper){
                 Launch.setPower(-.5);
-                side1.setPower(.9);
-                side2.setPower(-.9);
+//                side1.setPower(.9);
+//                side2.setPower(-.9);
             }
 
 //            if(color.blue()>color.green()&& color.blue()>100){
@@ -317,22 +317,22 @@ public class LeoCodingV15D extends LinearOpMode {
 //
 //            telemetry.update();
 
-            telemetry.addData("Detected AprilTag", AprilTagID);
+//            telemetry.addData("Detected AprilTag", AprilTagID);
 
 //            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("RedValue",  color.red());
 //            telemetry.addData("GreenValue",  color.green());
 //            telemetry.addData("argb",  color.argb());
-            telemetry.addData("color:",Color);
-
-            telemetry.addData("team:",Team);
-
-            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
-
-//            telemetry.addData("x",result.getTx());
-//              telemetry.addData("x",result.get;
-
-            telemetry.update();
+//            telemetry.addData("color:",Color);
+//
+//            telemetry.addData("team:",Team);
+//
+//            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
+////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
+////            telemetry.addData("x",result.getTx());
+////              telemetry.addData("x",result.get;
+//
+//            telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
 //            telemetry.addData("distance", distance.getDistance(DistanceUnit.CM));
