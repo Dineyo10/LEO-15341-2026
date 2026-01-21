@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
@@ -42,7 +43,7 @@ public class LeoCodingV15D extends LinearOpMode {
     private CRServo side2;
     private DcMotor Revolver;
     private DcMotor Launch;
-
+//    private DcMotorEx Launch;
     private Servo flick;
     private DistanceSensor Distance;
 
@@ -65,6 +66,12 @@ public class LeoCodingV15D extends LinearOpMode {
     boolean r=false;
     boolean l=false;
 
+//    static final double     COUNTS_PER_MOTOR_REV    = 28.0;
+//    static final double     DRIVE_GEAR_REDUCTION    = 1;
+//    static final double     WHEEL_CIRCUMFERENCE_MM  = 96 * 3.14;
+//
+//    static final double     COUNTS_PER_WHEEL_REV    = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;
+//    static final double     COUNTS_PER_MM           = COUNTS_PER_WHEEL_REV / WHEEL_CIRCUMFERENCE_MM;
 
 
 
@@ -87,6 +94,8 @@ public class LeoCodingV15D extends LinearOpMode {
         Revolver = hardwareMap.get(DcMotor.class, "Revolver");
 
         Launch = hardwareMap.get(DcMotor.class, "Launch");
+
+//        Launch = hardwareMap.get(DcMotorEx.class, "Launch");
 
         flick = hardwareMap.get(Servo.class, "flick");
 
@@ -116,8 +125,10 @@ public class LeoCodingV15D extends LinearOpMode {
 
 //        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+//        Launch.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        Launch.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//   /Kill Jeshu
+//        Launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
 //        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -144,9 +155,14 @@ public class LeoCodingV15D extends LinearOpMode {
 //        Launch2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        cap.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        cap2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        YawPitchRollAngles robotOrientation;
+//        YawPitchRollAngles robotOrientation
+                        //this number equals how far you want it to go
+//        int launchTarget = (int)(96*3.14 * COUNTS_PER_MM);
+////        int rightTarget = (int)(610 * COUNTS_PER_MM);
+//        double TPS = (60/ 60) * COUNTS_PER_WHEEL_REV;
 
         boolean pressed = false;
+
         waitForStart();
 
         while (opModeIsActive()) {
@@ -181,9 +197,9 @@ public class LeoCodingV15D extends LinearOpMode {
             Revolver.setPower((gamepad2.left_stick_y)*.6);
 //
             //reset revolver encoder
-            if(gamepad2.start){
-                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
+//            if(gamepad2.start){
+//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            }
 //
 ////          encoder control revolver
 //            if(gamepad2.b){
@@ -236,10 +252,13 @@ public class LeoCodingV15D extends LinearOpMode {
 //            Launch.setPower(gamepad2.left_stick_y);
 
 
+//number in middle is rotations per minute
+//            int close= 28*1/60;
 
 
-            //let launch speed up then turn on side motors
             if(gamepad2.dpad_up){
+//                Launch.setVelocity(56);
+
                 Launch.setPower(.7);
             }
             //turns on motors to bring artifact to launch
@@ -249,7 +268,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //            }
             //slow speed used more often
             if(gamepad2.dpad_down){
-                Launch.setPower(.52);
+                Launch.setPower(.55);
             }
             //stop launch
             if(gamepad2.y){
@@ -331,7 +350,11 @@ public class LeoCodingV15D extends LinearOpMode {
 ////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
 ////            telemetry.addData("x",result.getTx());
 ////              telemetry.addData("x",result.get;
-//
+//            telemetry.addData("TPS", TPS);
+//            telemetry.addData("launchtarget", launchTarget);
+//            telemetry.addData("launch",Launch.getCurrentPosition());
+//            telemetry.addData("launch",Launch.getPower());
+////            telemetry.addData("launch",Launch.getVelocity());
 //            telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
