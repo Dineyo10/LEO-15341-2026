@@ -55,6 +55,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //    private DcMotor test;
 
     private ColorSensor color;
+    int revolverpos=1;
 //    private CRServo Stopper;
 
 //    private int AprilTagID;
@@ -289,10 +290,14 @@ public class LeoCodingV15D extends LinearOpMode {
 //                Color="no artifact";
 //            }
 
+            if(Revolver.getCurrentPosition()>960 ||Revolver.getCurrentPosition()<-960)
+            revolverpos=1;
+
             if(Revolver.getCurrentPosition()>-80 &&Revolver.getCurrentPosition()<80){
                 if(color.blue()>color.green()&& color.blue()>100){
                 color1="purple";
             }
+
             }
 
 
