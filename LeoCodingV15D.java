@@ -47,9 +47,14 @@ public class LeoCodingV15D extends LinearOpMode {
     private Servo flick;
     private DistanceSensor Distance;
 
+    private String color1;
+    private String color2;
+    private String color3;
+
+
 //    private DcMotor test;
 
-//    private ColorSensor color;
+    private ColorSensor color;
 //    private CRServo Stopper;
 
 //    private int AprilTagID;
@@ -280,9 +285,17 @@ public class LeoCodingV15D extends LinearOpMode {
 //            else if(color.green()>color.blue()&& color.green()>100){
 //                Color="green";
 //            }
-//            else if(color.red()>color.blue()&& color.red()>color.green()&& color.red()>100){
+//            else {
 //                Color="no artifact";
 //            }
+
+            if(Revolver.getCurrentPosition()>-80 &&Revolver.getCurrentPosition()<80){
+                if(color.blue()>color.green()&& color.blue()>100){
+                color1="purple";
+            }
+            }
+
+
 //
 //            LLResult result = limelight.getLatestResult();
 //
@@ -336,12 +349,14 @@ public class LeoCodingV15D extends LinearOpMode {
 //
 //            telemetry.addData("team:",Team);
 //
-//            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
+
+            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
 ////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
 ////            telemetry.addData("x",result.getTx());
 ////              telemetry.addData("x",result.get;
 //            telemetry.addData("TPS", TPS);
 //            telemetry.addData("launchtarget", launchTarget);
+
             telemetry.addData("Target",TargetVelocity);
             telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
