@@ -56,6 +56,8 @@ public class LeoCodingV15D extends LinearOpMode {
 
     private ColorSensor color;
     int revolverpos=1;
+
+    int lastpos=1;
 //    private CRServo Stopper;
 
 //    private int AprilTagID;
@@ -289,12 +291,15 @@ public class LeoCodingV15D extends LinearOpMode {
 //                Color="no artifact";
 //            }
             if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
-                revolverpos = 1;
+                revolverpos=1;
                 Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
 
-            if(Revolver.getCurrentPosition()>-159&&Revolver.getCurrentPosition()<159){
-                revolverpos=1;
+
+            if(lastpos!=revolverpos) {
+
+                revolverpos++;
+                lastpos++;
             }
 
             if(revolverpos==1){
@@ -366,8 +371,8 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("TPS", TPS);
 //            telemetry.addData("launchtarget", launchTarget);
 
-            telemetry.addData("Target",TargetVelocity);
-            telemetry.addData("launch",Launch.getCurrentPosition());
+//            telemetry.addData("Target",TargetVelocity);
+//            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
             telemetry.addData("launch",Launch.getVelocity());
             telemetry.update();
