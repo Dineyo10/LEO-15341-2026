@@ -42,8 +42,8 @@ public class LeoCodingV15D extends LinearOpMode {
     private CRServo side1;
     private CRServo side2;
     private DcMotor Revolver;
-    private DcMotor Launch;
-//    private DcMotorEx Launch;
+//    private DcMotor Launch;
+    private DcMotorEx Launch;
     private Servo flick;
     private DistanceSensor Distance;
 
@@ -52,27 +52,22 @@ public class LeoCodingV15D extends LinearOpMode {
 //    private ColorSensor color;
 //    private CRServo Stopper;
 
-    private int AprilTagID;
+//    private int AprilTagID;
 //    private Limelight3A limelight;
 
-    private boolean team;
-
-    private String Team;
-
-    private String Color;
-
-    int revolverpos;
-
-    boolean r=false;
-    boolean l=false;
-
-//    static final double     COUNTS_PER_MOTOR_REV    = 28.0;
-//    static final double     DRIVE_GEAR_REDUCTION    = 1;
-//    static final double     WHEEL_CIRCUMFERENCE_MM  = 96 * 3.14;
+//    private boolean team;
 //
-//    static final double     COUNTS_PER_WHEEL_REV    = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;
-//    static final double     COUNTS_PER_MM           = COUNTS_PER_WHEEL_REV / WHEEL_CIRCUMFERENCE_MM;
+//    private String Team;
+//
+//    private String Color;
 
+//    int revolverpos;
+
+//    boolean r=false;
+//    boolean l=false;
+
+    static final double     COUNTS_PER_MOTOR_REV    = 28.0;
+    static final double     TARGET_RPM    = 600;
 
 
     @Override
@@ -93,9 +88,9 @@ public class LeoCodingV15D extends LinearOpMode {
 
         Revolver = hardwareMap.get(DcMotor.class, "Revolver");
 
-        Launch = hardwareMap.get(DcMotor.class, "Launch");
+//        Launch = hardwareMap.get(DcMotor.class, "Launch");
 
-//        Launch = hardwareMap.get(DcMotorEx.class, "Launch");
+        Launch = hardwareMap.get(DcMotorEx.class, "Launch");
 
         flick = hardwareMap.get(Servo.class, "flick");
 
@@ -124,17 +119,17 @@ public class LeoCodingV15D extends LinearOpMode {
 //        telemetry.addData("",limelight.updateRobotOrientation(50));
 
 //        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-//        Launch.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        Launch.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//   /Kill Jeshu
-//        Launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        Launch.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        Launch.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
 //        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
 //        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         right_back.setDirection(DcMotor.Direction.REVERSE);
 //        Conveyor.setDirection(DcMotor.Direction.REVERSE);
+        Launch.setDirection(DcMotor.Direction.REVERSE);
 
 
 //        telemetry.setMsTransmissionInterval(11);
@@ -156,10 +151,12 @@ public class LeoCodingV15D extends LinearOpMode {
 //        cap.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        cap2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        YawPitchRollAngles robotOrientation
-                        //this number equals how far you want it to go
+        //this number equals how far you want it to go
 //        int launchTarget = (int)(96*3.14 * COUNTS_PER_MM);
 ////        int rightTarget = (int)(610 * COUNTS_PER_MM);
 //        double TPS = (60/ 60) * COUNTS_PER_WHEEL_REV;
+
+        double TargetVelocity = (TARGET_RPM*COUNTS_PER_MOTOR_REV)/60.0;
 
         boolean pressed = false;
 
@@ -255,33 +252,26 @@ public class LeoCodingV15D extends LinearOpMode {
 //number in middle is rotations per minute
 //            int close= 28*1/60;
 
-
+            //fast button  28 is how many ticks per rev
             if(gamepad2.dpad_up){
-//                Launch.setVelocity(56);
-
-                Launch.setPower(.7);
+                Launch.setVelocity(53.5*28);
+//                Launch.setPower(.7);
             }
-            //turns on motors to bring artifact to launch
-//            if(gamepad2.dpad_right){
-//                side1.setPower(-.9);
-//                side2.setPower(.9);
-//            }
+
             //slow speed used more often
             if(gamepad2.dpad_down){
-                Launch.setPower(.55);
+                Launch.setVelocity(46.5*28);
+
+//                Launch.setPower(.55);
             }
             //stop launch
             if(gamepad2.y){
-//                side1.setPower(0);
-//                side2.setPower(0);
-                Launch.setPower(0);
+                Launch.setVelocity(0);
             }
 
             //backward launch button
             if(gamepad2.left_bumper){
                 Launch.setPower(-.5);
-//                side1.setPower(.9);
-//                side2.setPower(-.9);
             }
 
 //            if(color.blue()>color.green()&& color.blue()>100){
@@ -352,10 +342,11 @@ public class LeoCodingV15D extends LinearOpMode {
 ////              telemetry.addData("x",result.get;
 //            telemetry.addData("TPS", TPS);
 //            telemetry.addData("launchtarget", launchTarget);
-//            telemetry.addData("launch",Launch.getCurrentPosition());
+            telemetry.addData("Target",TargetVelocity);
+            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
-////            telemetry.addData("launch",Launch.getVelocity());
-//            telemetry.update();
+            telemetry.addData("launch",Launch.getVelocity());
+            telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
 //            telemetry.addData("distance", distance.getDistance(DistanceUnit.CM));
