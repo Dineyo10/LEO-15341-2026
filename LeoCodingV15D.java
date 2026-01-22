@@ -67,7 +67,6 @@ public class LeoCodingV15D extends LinearOpMode {
 //
 //    private String Color;
 
-//    int revolverpos;
 
 //    boolean r=false;
 //    boolean l=false;
@@ -289,11 +288,16 @@ public class LeoCodingV15D extends LinearOpMode {
 //            else {
 //                Color="no artifact";
 //            }
+            if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
+                revolverpos = 1;
+                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
 
-            if(Revolver.getCurrentPosition()>960 ||Revolver.getCurrentPosition()<-960)
-            revolverpos=1;
+            if(Revolver.getCurrentPosition()>-159&&Revolver.getCurrentPosition()<159){
+                revolverpos=1;
+            }
 
-            if(Revolver.getCurrentPosition()>-80 &&Revolver.getCurrentPosition()<80){
+            if(revolverpos==1){
                 if(color.blue()>color.green()&& color.blue()>100){
                 color1="purple";
             }
