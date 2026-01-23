@@ -26,6 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.RowSetEvent;
 
@@ -301,25 +302,25 @@ public class LeoCodingV15D extends LinearOpMode {
                 revolverpos++;
             }
 
-            if(revolverpos==1) SetColor();
-            if(revolverpos==3) {
-                    if (color.blue() > color.green() && color.blue() > 100) {
-                        color2 = "purple";
-                    } else if (color.green() > color.blue() && color.green() > 100) {
-                        color2 = "green";
-                    } else {
-                        color2 = "none";
-                    }
-                }
-                    if(revolverpos==5) {
-                        if (color.blue() > color.green() && color.blue() > 100) {
-                            color3 = "purple";
-                        } else if (color.green() > color.blue() && color.green() > 100) {
-                            color3 = "green";
-                        } else {
-                            color3 = "none";
-                        }
-                    }
+            if(revolverpos==1) color1=SetColor();
+            if(revolverpos==3) color2=SetColor();
+//                    if (color.blue() > color.green() && color.blue() > 100) {
+//                        color2 = "purple";
+//                    } else if (color.green() > color.blue() && color.green() > 100) {
+//                        color2 = "green";
+//                    } else {
+//                        color2 = "none";
+//                    }
+//                }
+                    if(revolverpos==5) color3=SetColor();//{
+//                        if (color.blue() > color.green() && color.blue() > 100) {
+//                            color3 = "purple";
+//                        } else if (color.green() > color.blue() && color.green() > 100) {
+//                            color3 = "green";
+//                        } else {
+//                            color3 = "none";
+//                        }
+//                    }
 
 
 
