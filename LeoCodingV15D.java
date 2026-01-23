@@ -302,9 +302,36 @@ public class LeoCodingV15D extends LinearOpMode {
             }
 
             if(revolverpos==1){
-                if(color.blue()>color.green()&& color.blue()>100){
-                color1="purple";
-            }
+                if(color.blue()>color.green()&& color.blue()>100) {
+                    color1 = "purple";
+                }
+                else if(color.green()>color.blue()&& color.green()>100) {
+                    color1 = "green";
+                }
+                else{
+                    color1="none";
+                    }
+                if(revolverpos==3){
+                    if(color.blue()>color.green()&& color.blue()>100) {
+                        color2 = "purple";
+                    }
+                    else if(color.green()>color.blue()&& color.green()>100) {
+                        color2 = "green";
+                    }
+                    else{
+                        color2="none";
+                    }
+                    if(revolverpos==5){
+                        if(color.blue()>color.green()&& color.blue()>100) {
+                            color3 = "purple";
+                        }
+                        else if(color.green()>color.blue()&& color.green()>100) {
+                            color3 = "green";
+                        }
+                        else{
+                            color3="none";
+                        }
+
 
             }
 
