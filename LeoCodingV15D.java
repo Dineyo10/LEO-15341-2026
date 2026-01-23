@@ -304,6 +304,17 @@ public class LeoCodingV15D extends LinearOpMode {
 
             if(revolverpos==1) color1=SetColor();
             if(revolverpos==3) color2=SetColor();
+            if(revolverpos==5) color3=SetColor();
+
+            if(revolverpos==7){
+                revolverpos=1;
+            }
+
+
+
+
+
+
 //                    if (color.blue() > color.green() && color.blue() > 100) {
 //                        color2 = "purple";
 //                    } else if (color.green() > color.blue() && color.green() > 100) {
@@ -312,7 +323,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //                        color2 = "none";
 //                    }
 //                }
-                    if(revolverpos==5) color3=SetColor();//{
+                   //{
 //                        if (color.blue() > color.green() && color.blue() > 100) {
 //                            color3 = "purple";
 //                        } else if (color.green() > color.blue() && color.green() > 100) {
@@ -327,9 +338,7 @@ public class LeoCodingV15D extends LinearOpMode {
 
 
 
-            if(revolverpos==7){
-                revolverpos=1;
-            }
+
 //
 //            LLResult result = limelight.getLatestResult();
 //
