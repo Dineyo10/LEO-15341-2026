@@ -296,9 +296,9 @@ public class LeoCodingV15D extends LinearOpMode {
             }
 
 
-            if(lastpos!=Revolver.getCurrentPosition()){
+            if(Math.abs(lastpos - Revolver.getCurrentPosition())>160){
+            lastpos=Revolver.getCurrentPosition();
                 revolverpos++;
-                Math.abs(lastpos-Revolver.getCurrentPosition());
             }
 
             if(revolverpos==1){
@@ -309,6 +309,11 @@ public class LeoCodingV15D extends LinearOpMode {
             }
 
 
+
+
+            if(revolverpos==7){
+                revolverpos=1;
+            }
 //
 //            LLResult result = limelight.getLatestResult();
 //
