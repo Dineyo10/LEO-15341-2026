@@ -301,7 +301,7 @@ public class LeoCodingV15D extends LinearOpMode {
                 revolverpos++;
             }
 
-            if(revolverpos==1) extracted();
+            if(revolverpos==1) SetColor();
             if(revolverpos==3) {
                     if (color.blue() > color.green() && color.blue() > 100) {
                         color2 = "purple";
@@ -413,19 +413,21 @@ public class LeoCodingV15D extends LinearOpMode {
 
     }
 
-    private void extracted() {
+    private String SetColor() {
+        String Colors;
         if (color.blue() > color.green() && color.blue() > 100) {
-            color1 = "purple";
+            Colors = "purple";
         } else if (color.green() > color.blue() && color.green() > 100) {
-            color1 = "green";
+            Colors = "green";
         } else {
-            color1 = "none";
+            Colors = "none";
         }
+        return Colors;
     }
 
-    public void setColor(){
-
-    }
+//    public void setColor(){
+//
+//    }
 
 
 
