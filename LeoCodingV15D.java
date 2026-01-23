@@ -260,7 +260,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //number in middle is rotations per minute
 //            int close= 28*1/60;
 
-            //fast button  28 is how many ticks per rev
+            //fast button 28 is how many ticks per rev
             if(gamepad2.dpad_up){
                 Launch.setVelocity(53.5*28);
 //                Launch.setPower(.7);
@@ -404,7 +404,11 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
 //            telemetry.addData("launch",Launch.getVelocity());
-//            telemetry.
+            telemetry.addData("color1",color1);
+            telemetry.addData("color2",color2);
+            telemetry.addData("color3",color3);
+            telemetry.addData("lastpos",lastpos);
+            telemetry.addData("currentpos",revolverpos);
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
