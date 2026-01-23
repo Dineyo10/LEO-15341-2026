@@ -296,10 +296,9 @@ public class LeoCodingV15D extends LinearOpMode {
             }
 
 
-
             if(lastpos!=Revolver.getCurrentPosition()){
                 revolverpos++;
-                lastpos=Revolver.getCurrentPosition();
+                Math.abs(lastpos-Revolver.getCurrentPosition());
             }
 
             if(revolverpos==1){
