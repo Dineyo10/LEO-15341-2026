@@ -301,16 +301,8 @@ public class LeoCodingV15D extends LinearOpMode {
                 revolverpos++;
             }
 
-            if(revolverpos==1) {
-                if (color.blue() > color.green() && color.blue() > 100) {
-                    color1 = "purple";
-                } else if (color.green() > color.blue() && color.green() > 100) {
-                    color1 = "green";
-                } else {
-                    color1 = "none";
-                }
-            }
-                if(revolverpos==3) {
+            if(revolverpos==1) extracted();
+            if(revolverpos==3) {
                     if (color.blue() > color.green() && color.blue() > 100) {
                         color2 = "purple";
                     } else if (color.green() > color.blue() && color.green() > 100) {
@@ -401,7 +393,8 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("Target",TargetVelocity);
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
-            telemetry.addData("launch",Launch.getVelocity());
+//            telemetry.addData("launch",Launch.getVelocity());
+//            telemetry.
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
@@ -418,9 +411,21 @@ public class LeoCodingV15D extends LinearOpMode {
 
         }
 
-
     }
 
+    private void extracted() {
+        if (color.blue() > color.green() && color.blue() > 100) {
+            color1 = "purple";
+        } else if (color.green() > color.blue() && color.green() > 100) {
+            color1 = "green";
+        } else {
+            color1 = "none";
+        }
+    }
+
+    public void setColor(){
+
+    }
 
 
 
