@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -44,7 +46,7 @@ public class OldBotmeet4bluefar extends LinearOpMode {
 
     private DcMotor intake;
     private DcMotor Revolver;
-    private DcMotor Launch;
+    private DcMotorEx Launch;
 
     private Servo flick;
 
@@ -61,8 +63,19 @@ public class OldBotmeet4bluefar extends LinearOpMode {
     private String Team;
 
     private String Color;
+    private ColorSensor color;
+    int revolverpos=1;
+    private String color1;
+    private String color2;
+    private String color3;
+    int lastpos=0;
 
-    int revolverpos;
+    double far=59*28;
+
+    double close=46.5*28;
+
+
+//    int revolverpos;
 
     //    private AprilTagProcessor aprilTag;
 //    private VisionPortal visionPortal;
@@ -104,7 +117,7 @@ public class OldBotmeet4bluefar extends LinearOpMode {
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,50,0,AngleUnit.DEGREES,20);
 //    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1400,200,AngleUnit.DEGREES,0);
     static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 580, 300, AngleUnit.DEGREES, 90);
-    static final Pose2D TARGET_3_Left = new Pose2D(DistanceUnit.MM, 580, 1000, AngleUnit.DEGREES, 90);
+    static final Pose2D TARGET_3_Left = new Pose2D(DistanceUnit.MM, 580, 1200, AngleUnit.DEGREES, 90);
 //    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 1292, 300, AngleUnit.DEGREES, 90);
 //    static final Pose2D TARGET_3_Center = new Pose2D(DistanceUnit.MM, 1292, 974, AngleUnit.DEGREES, 90);
 //    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 1777, 300, AngleUnit.DEGREES, 90);
@@ -112,7 +125,7 @@ public class OldBotmeet4bluefar extends LinearOpMode {
 
 //    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-680,800, AngleUnit.DEGREES,45);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 50, 0, AngleUnit.DEGREES, 20);
-    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 300, 0, AngleUnit.DEGREES, 0);
+    static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 700, 0, AngleUnit.DEGREES, 0);
 
     static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -270, 520, AngleUnit.DEGREES, 45);
 
@@ -146,7 +159,7 @@ public class OldBotmeet4bluefar extends LinearOpMode {
 
         Revolver = hardwareMap.get(DcMotor.class, "Revolver");
 
-        Launch = hardwareMap.get(DcMotor.class, "Launch");
+        Launch = hardwareMap.get(DcMotorEx.class, "Launch");
 
         flick = hardwareMap.get(Servo.class, "flick");
 
@@ -158,7 +171,7 @@ public class OldBotmeet4bluefar extends LinearOpMode {
         rightBackDrive  = hardwareMap.get(DcMotor.class, "RB");
 
 
-        Launch = hardwareMap.get(DcMotor.class, "Launch");
+//        Launch = hardwareMap.get(DcMotor.class, "Launch");
 
 
 
@@ -172,11 +185,12 @@ public class OldBotmeet4bluefar extends LinearOpMode {
         limelight.pipelineSwitch(0);
 
 
-//        color = hardwareMap.get(ColorSensor.class, "color");
+        color = hardwareMap.get(ColorSensor.class, "color");
 //        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
 //        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        Launch.setDirection(DcMotor.Direction.REVERSE);
 
         Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -264,9 +278,26 @@ public class OldBotmeet4bluefar extends LinearOpMode {
 //                    int AprilTagID = fiducial.getFiducialId();
 //
 //                    telemetry.addData("Detected Apriltag", AprilTagID);
-//                }
+////                }
+////
+//            if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
+//                revolverpos=1;
+////                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            }
 //
-
+//
+//            if(Math.abs(lastpos - Revolver.getCurrentPosition())>160){
+//                lastpos=Revolver.getCurrentPosition();
+//                revolverpos++;
+//            }
+//
+//            if(revolverpos==1) color1=SetColor();
+//            if(revolverpos==3) color2=SetColor();
+//            if(revolverpos==5) color3=SetColor();
+//
+//            if(revolverpos==7){
+//                revolverpos=1;
+//            }
 //second attempt at doing this
 
 
@@ -305,7 +336,7 @@ public class OldBotmeet4bluefar extends LinearOpMode {
                     break;
                 case DRIVE_TO_TARGET_1:
 //                    launch1();
-                    Launch.setPower(.65);
+                    Launch.setVelocity(far);
 
 
                     /*
@@ -320,13 +351,16 @@ public class OldBotmeet4bluefar extends LinearOpMode {
                         sleep(2000);
 
                         if (AprilTagID==21) {
-                            launch1();
+                            launch21();
                         }
                         else if (AprilTagID==22) {
-
+                        launch22();
+                        }
+                        else if (AprilTagID==23) {
+                            launch23();
                         }
                         else{
-
+                        launch21();
                         }
 //                        sleep(5000);
 //                        flick();
@@ -363,19 +397,19 @@ public class OldBotmeet4bluefar extends LinearOpMode {
 //                    }
                     break;
                 case DRIVE_TO_TARGET_2_Left:
-                    if (nav.driveTo(odo.getPosition(), TARGET_2_Left, .7, 2)){
+                    if (nav.driveTo(odo.getPosition(), TARGET_2_Left, .4, .5)){
                     intake();
                         telemetry.addLine("at position #2!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_3_Left;
                     }
                     break;
                 case DRIVE_TO_TARGET_3_Left:
-                    if (nav.driveTo(odo.getPosition(), TARGET_3_Left, .7, 2)){
+                    if (nav.driveTo(odo.getPosition(), TARGET_3_Left, .7, .5)){
 //                        intake();
                         telemetry.addLine("at position #2!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_4;
                         Stopintake();
-                        Launch.setPower(.65);
+                        Launch.setVelocity(far);
 
                     }
                     break;
@@ -427,7 +461,21 @@ public class OldBotmeet4bluefar extends LinearOpMode {
                 case DRIVE_TO_TARGET_4:
                     if(nav.driveTo(odo.getPosition(),TARGET_4,.8,.5)){
                         telemetry.addLine("at position #4");
-                        launch2();
+
+                        if (AprilTagID==21) {
+                            launch21();
+                        }
+                        else if (AprilTagID==22) {
+                            launch22();
+                        }
+                        else if (AprilTagID==23) {
+                            launch23();
+                        }
+                        else{
+                            launch21();
+                        }
+
+
                         stateMachine = StateMachine.DRIVE_TO_TARGET_5;
                     }
                     break;
@@ -514,12 +562,17 @@ public class OldBotmeet4bluefar extends LinearOpMode {
             String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
             telemetry.addData("Position", data);
 
+//            telemetry.addData("color1",color1);
+//            telemetry.addData("color2",color2);
+//            telemetry.addData("color3",color3);
+//            telemetry.addData("lastpos",lastpos);
+//            telemetry.addData("currentpos",revolverpos);
             telemetry.update();
 
         }
 
     }
-    private void launch1(){
+    private void launch21(){
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flick.setPosition(.7);
         sleep(1000);
@@ -542,16 +595,19 @@ public class OldBotmeet4bluefar extends LinearOpMode {
         sleep(800);
         flick.setPosition(.45);
         sleep(700);
-        Launch.setPower(0);
+        Launch.setVelocity(0);
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-    private void launch2(){Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    private void launch22(){Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setTargetPosition(-320);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.7);
         flick.setPosition(.7);
         sleep(1000);
 //        Launch.setPower(.55);
         flick.setPosition(.45);
-        Revolver.setTargetPosition(-320);
+        Revolver.setTargetPosition(0);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
         sleep(2500);
@@ -560,7 +616,7 @@ public class OldBotmeet4bluefar extends LinearOpMode {
         flick.setPosition(.45);
 //        Launch.setPower(.75);
 //    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Revolver.setTargetPosition(-640);
+        Revolver.setTargetPosition(320);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
         sleep(2500);
@@ -568,12 +624,42 @@ public class OldBotmeet4bluefar extends LinearOpMode {
         sleep(800);
         flick.setPosition(.45);
         sleep(700);
-        Launch.setPower(0);
+        Launch.setVelocity(0);
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+    private void launch23(){Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setTargetPosition(320);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.7);
+        sleep(2000);
+        flick.setPosition(.7);
+        sleep(1000);
+//        Launch.setPower(.55);
+        flick.setPosition(.45);
+        Revolver.setTargetPosition(640);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.7);
+        sleep(2500);
+        flick.setPosition(.7);
+        sleep(800);
+        flick.setPosition(.45);
+//        Launch.setPower(.75);
+//    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setTargetPosition(960);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.7);
+        sleep(2500);
+        flick.setPosition(.7);
+        sleep(800);
+        flick.setPosition(.45);
+        sleep(700);
+        Launch.setVelocity(0);
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
     private void intake(){
-        Launch.setPower(0);
+        Launch.setVelocity(0);
         intake.setPower(1);
         Revolver.setTargetPosition(160*6);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -584,8 +670,21 @@ public class OldBotmeet4bluefar extends LinearOpMode {
         intake.setPower(0);
         Revolver.setPower(0);
         Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        side1.setPower(0);
-        side2.setPower(0);
+//        side1.setPower(0);
+//        side2.setPower(0);
     }
-
+    private String SetColor() {
+        String Colors;
+        if (color.blue() > color.green() &&color.blue()>color.red() && color.blue() > 100) {
+            Colors = "purple";
+        } else if (color.green() > color.blue() && color.green()>color.red() &&color.green() > 100) {
+            Colors = "green";
+        } else if (color.red() > color.blue() && color.red()>color.green()&& color.red() > 100){
+            Colors = "none";
+        }
+        else {
+            Colors="none";
+        }
+        return Colors;
+    }
 }

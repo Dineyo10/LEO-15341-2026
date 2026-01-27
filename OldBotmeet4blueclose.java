@@ -175,6 +175,7 @@ public class OldBotmeet4blueclose extends LinearOpMode {
         Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Launch.setDirection(DcMotor.Direction.REVERSE);
 
 //        leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 //        leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);

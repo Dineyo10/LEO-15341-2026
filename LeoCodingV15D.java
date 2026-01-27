@@ -58,7 +58,7 @@ public class LeoCodingV15D extends LinearOpMode {
     private ColorSensor color;
     int revolverpos=1;
 
-    int lastpos=1;
+    int lastpos=0;
 //    private CRServo Stopper;
 
 //    private int AprilTagID;
@@ -113,7 +113,7 @@ public class LeoCodingV15D extends LinearOpMode {
         side2 = hardwareMap.get(CRServo.class, "side2");
 
 
-//        color = hardwareMap.get(ColorSensor.class, "color");
+        color = hardwareMap.get(ColorSensor.class, "color");
         Distance = hardwareMap.get(DistanceSensor.class, "Distance");
 
 
@@ -126,7 +126,9 @@ public class LeoCodingV15D extends LinearOpMode {
 //            if(limelight.)
 //        telemetry.addData("",limelight.updateRobotOrientation(50));
 
-//        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         Launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         Launch.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -262,7 +264,7 @@ public class LeoCodingV15D extends LinearOpMode {
 
             //fast button 28 is how many ticks per rev
             if(gamepad2.dpad_up){
-                Launch.setVelocity(53.5*28);
+                Launch.setVelocity(57*28);
 //                Launch.setPower(.7);
             }
 
@@ -293,21 +295,32 @@ public class LeoCodingV15D extends LinearOpMode {
 //            }
             if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
                 revolverpos=1;
+                lastpos=0;
                 Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                Revolver.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
             }
 
 
-            if(Math.abs(lastpos - Revolver.getCurrentPosition())>160){
-            lastpos=Revolver.getCurrentPosition();
+            if(Math.abs(lastpos - Revolver.getCurrentPosition())>160&&(lastpos>Revolver.getCurrentPosition())){
+                lastpos=Revolver.getCurrentPosition();
+//            lastpos=revolverpos*160;
                 revolverpos++;
+            }
+
+            if(((lastpos - Revolver.getCurrentPosition())<-160)&&(lastpos<Revolver.getCurrentPosition())){
+                lastpos=Revolver.getCurrentPosition();
+//                lastpos=revolverpos*160;
+                revolverpos--;
             }
 
             if(revolverpos==1) color1=SetColor();
             if(revolverpos==3) color2=SetColor();
             if(revolverpos==5) color3=SetColor();
 
-            if(revolverpos==7){
-                revolverpos=1;
+
+            if(revolverpos==7||revolverpos==-6){
+                revolverpos=0;
             }
 
 
@@ -384,8 +397,8 @@ public class LeoCodingV15D extends LinearOpMode {
 
 //            telemetry.addData("Detected AprilTag", AprilTagID);
 
-//            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("RedValue",  color.red());
+//            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("GreenValue",  color.green());
 //            telemetry.addData("argb",  color.argb());
 //            telemetry.addData("color:",Color);
@@ -403,7 +416,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("Target",TargetVelocity);
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
-//            telemetry.addData("launch",Launch.getVelocity());
+            telemetry.addData("launch",Launch.getVelocity());
             telemetry.addData("color1",color1);
             telemetry.addData("color2",color2);
             telemetry.addData("color3",color3);
@@ -429,12 +442,15 @@ public class LeoCodingV15D extends LinearOpMode {
 
     private String SetColor() {
         String Colors;
-        if (color.blue() > color.green() && color.blue() > 100) {
+        if (color.blue() > color.green() &&color.blue()>color.red() && color.blue() > 100) {
             Colors = "purple";
-        } else if (color.green() > color.blue() && color.green() > 100) {
+        } else if (color.green() > color.blue() && color.green()>color.red() &&color.green() > 100) {
             Colors = "green";
-        } else {
+        } else if (color.red() > color.blue() && color.red()>color.green()&& color.red() > 100){
             Colors = "none";
+        }
+        else {
+            Colors="none";
         }
         return Colors;
     }
