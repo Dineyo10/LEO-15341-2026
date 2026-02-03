@@ -243,7 +243,7 @@ public class LeoCodingV15D extends LinearOpMode {
 
             //flick control
             if(gamepad2.right_bumper){
-                flick.setPosition(0.7);
+                flick.setPosition(0.8);
             }
             else if(gamepad2.a ||gamepad2.b){
                 flick.setPosition(0.45);
@@ -270,7 +270,7 @@ public class LeoCodingV15D extends LinearOpMode {
 
             //slow speed used more often
             if(gamepad2.dpad_down){
-                Launch.setVelocity(46.5*28);
+                Launch.setVelocity(49*28);
 
 //                Launch.setPower(.55);
             }
@@ -416,12 +416,12 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("Target",TargetVelocity);
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
-            telemetry.addData("launch",Launch.getVelocity());
-            telemetry.addData("color1",color1);
-            telemetry.addData("color2",color2);
-            telemetry.addData("color3",color3);
-            telemetry.addData("lastpos",lastpos);
-            telemetry.addData("currentpos",revolverpos);
+            telemetry.addData("launch",Launch.getVelocity()/28);
+//            telemetry.addData("color1",color1);
+//            telemetry.addData("color2",color2);
+//            telemetry.addData("color3",color3);
+//            telemetry.addData("lastpos",lastpos);
+//            telemetry.addData("currentpos",revolverpos);
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
