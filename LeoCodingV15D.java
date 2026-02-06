@@ -300,6 +300,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //                Color="no artifact";
 //            }
 
+
             //old attempt
 //            if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
 //                revolverpos=1;
@@ -329,14 +330,13 @@ public class LeoCodingV15D extends LinearOpMode {
 
             }
 
-
             if(Math.abs(lastpos - Revolver.getCurrentPosition())>160&&(lastpos>Revolver.getCurrentPosition())){
                 lastpos=Revolver.getCurrentPosition();
 //            lastpos=revolverpos*160;
                 revolverpos++;
             }
 
-            if(((lastpos - Revolver.getCurrentPosition())<-160)&&(lastpos<Revolver.getCurrentPosition())){
+            else if((Math.abs(lastpos - Revolver.getCurrentPosition())<-160)&&(lastpos<Revolver.getCurrentPosition())){
                 lastpos=Revolver.getCurrentPosition();
 //                lastpos=revolverpos*160;
                 revolverpos--;
