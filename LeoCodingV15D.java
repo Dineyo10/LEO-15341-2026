@@ -347,8 +347,11 @@ public class LeoCodingV15D extends LinearOpMode {
             if(revolverpos==5) color3=SetColor();
 
 
-            if(revolverpos==7||revolverpos==-6){
-                revolverpos=0;
+            if(revolverpos==7){
+                revolverpos=1;
+            }
+            if(revolverpos==0){
+                revolverpos=6;
             }
 
 
