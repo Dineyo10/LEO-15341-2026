@@ -299,6 +299,28 @@ public class LeoCodingV15D extends LinearOpMode {
 //            else {
 //                Color="no artifact";
 //            }
+
+            //old attempt
+//            if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
+//                revolverpos=1;
+////                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            }
+//
+//
+//            if(Math.abs(lastpos - Revolver.getCurrentPosition())>160){
+//                lastpos=Revolver.getCurrentPosition();
+//                revolverpos++;
+//            }
+//
+//            if(revolverpos==1) color1=SetColor();
+//            if(revolverpos==3) color2=SetColor();
+//            if(revolverpos==5) color3=SetColor();
+//
+//            if(revolverpos==7){
+//                revolverpos=1;
+//            }
+
+            //new attempt
             if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
                 revolverpos=1;
                 lastpos=0;
@@ -404,7 +426,7 @@ public class LeoCodingV15D extends LinearOpMode {
                  CanLaunch="Yes:blue";
 //            Launch.setVelocity(far);
             }
-            
+
             if((result.getTx())<10&& result.getTx()>-10&& result.getTx()!=0&&!team){
                 CanLaunch="Yes:red";
 //            Launch.setVelocity(far);
