@@ -14,7 +14,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
+import com.qualcomm.hardware.limelightvision.LLResult;
+//import com.qualcomm.hardware.limelightvision.LimeLight3A;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+//impor com.qualconm.robotcore.eventLoop.opmode.TeleOp;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+//import org.firstinspires.ftc.teamcode.mechanisms.TestBench;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
@@ -25,6 +32,8 @@ public class ApriltagLimelightTest extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
 
+//    private bench = new TestBench();
+    private double distance;
     @Override
     public void runOpMode() {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -37,7 +46,7 @@ public class ApriltagLimelightTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             LLResult result = limelight.getLatestResult();
-
+//
             if (result != null && result.isValid()) {
                 List<FiducialResult> fiducials = result.getFiducialResults();
 
@@ -45,13 +54,18 @@ public class ApriltagLimelightTest extends LinearOpMode {
                     int AprilTagID = fiducial.getFiducialId();
 
         telemetry.addData("Detected Apriltag", AprilTagID);
+            telemetry.addData("angle",result.getTx());
+            telemetry.addData("distance",result.getTa());
 
-                }
+
+            //CODE WORK OR ELSE
+
 //            telemetry.addData("TagId", );
-            } else {
-                telemetry.addData("Limelight", "No Targets");
+//            } else {
+//                telemetry.addData("Limelight", "No Targets");
             }
-            telemetry.update();
+//            telemetry.update();
+        }
         }
     }
 }

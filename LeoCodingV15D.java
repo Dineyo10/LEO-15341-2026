@@ -8,6 +8,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.Prism.Color;
+import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
+import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
+
+import java.util.concurrent.TimeUnit;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
@@ -59,6 +64,9 @@ public class LeoCodingV15D extends LinearOpMode {
 //    private DcMotor test;
 
     private ColorSensor color;
+
+    private ColorSensor top;
+
     int revolverpos=1;
 
     int lastpos=0;
@@ -347,12 +355,15 @@ public class LeoCodingV15D extends LinearOpMode {
             if(revolverpos==5) color3=SetColor();
 
 
-            if(revolverpos==7){
+            if(revolverpos>=7){
                 revolverpos=1;
             }
-            if(revolverpos==0){
+
+            if(revolverpos<=0){
                 revolverpos=6;
             }
+
+
 
 
 

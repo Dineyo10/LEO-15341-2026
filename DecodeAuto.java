@@ -185,16 +185,16 @@ public class DecodeAuto extends LinearOpMode {
             telemetry.addLine("Limelight: No valid results");
         }
 
-        if(AprilTagID== 21){
-            telemetry.addLine("21");
-        }
-        if(AprilTagID== 22){
-            telemetry.addLine("22");
-        }
-        if(AprilTagID== 23){
-            telemetry.addLine("23");
-        }
-        telemetry.update();
+//        if(AprilTagID== 21){
+//            telemetry.addLine("21");
+//        }
+//        if(AprilTagID== 22){
+//            telemetry.addLine("22");
+//        }
+//        if(AprilTagID== 23){
+//            telemetry.addLine("23");
+//        }
+//        telemetry.update();
 
         // Wait for the game to start (driver presses START)
         waitForStart();
