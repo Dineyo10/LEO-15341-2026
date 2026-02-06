@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import javax.sql.RowSetEvent;
 
-//@Disabled
+@Disabled
 @TeleOp
 public class LeoCodingV15C extends LinearOpMode {
     private DcMotor left_drive;

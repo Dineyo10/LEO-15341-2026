@@ -52,6 +52,9 @@ public class LeoCodingV15D extends LinearOpMode {
     private String color2;
     private String color3;
 
+    private String CanLaunch;
+    private String closefar;
+
 
 //    private DcMotor test;
 
@@ -61,12 +64,15 @@ public class LeoCodingV15D extends LinearOpMode {
     int lastpos=0;
 //    private CRServo Stopper;
 
-//    private int AprilTagID;
-//    private Limelight3A limelight;
+    private int AprilTagID;
+    private Limelight3A limelight;
 
-//    private boolean team;
+    private boolean team;
 //
-//    private String Team;
+    private String Team;
+    double far=57*28;
+
+    double close=49*28;
 //
 //    private String Color;
 
@@ -117,10 +123,10 @@ public class LeoCodingV15D extends LinearOpMode {
         Distance = hardwareMap.get(DistanceSensor.class, "Distance");
 
 
-//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-//        limelight.start();
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.start();
 
-//        limelight.pipelineSwitch(1);
+        limelight.pipelineSwitch(0);
 
 
 //            if(limelight.)
@@ -253,7 +259,7 @@ public class LeoCodingV15D extends LinearOpMode {
                 flick.setPosition(.45);
             }
             //intake control, keep slow
-            intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*.7);
+            intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*.9);
 
 
 //            Launch.setPower(gamepad2.left_stick_y);
@@ -264,13 +270,13 @@ public class LeoCodingV15D extends LinearOpMode {
 
             //fast button 28 is how many ticks per rev
             if(gamepad2.dpad_up){
-                Launch.setVelocity(57*28);
+                Launch.setVelocity(far);
 //                Launch.setPower(.7);
             }
 
             //slow speed used more often
             if(gamepad2.dpad_down){
-                Launch.setVelocity(49*28);
+                Launch.setVelocity(close);
 
 //                Launch.setPower(.55);
             }
@@ -353,18 +359,18 @@ public class LeoCodingV15D extends LinearOpMode {
 
 
 //
-//            LLResult result = limelight.getLatestResult();
-//
-//            if (result != null && result.isValid()) {
-//                List<FiducialResult> fiducials = result.getFiducialResults();
-//
-//                if (!fiducials.isEmpty()) {
-////                     Grab the first detected tag
-//                    AprilTagID = fiducials.get(0).getFiducialId();
-//
+            LLResult result = limelight.getLatestResult();
+
+            if (result != null && result.isValid()) {
+                List<FiducialResult> fiducials = result.getFiducialResults();
+
+                if (!fiducials.isEmpty()) {
+//                     Grab the first detected tag
+                    AprilTagID = fiducials.get(0).getFiducialId();
+
 //                    telemetry.addData("Detected AprilTag", AprilTagID);
-//                }
-//            }
+                }
+            }
 
 //            if(result.getTx()>5){
 //                test.setPower(-.1);
@@ -376,21 +382,47 @@ public class LeoCodingV15D extends LinearOpMode {
 //               test.setPower(0);
 //            }
 
-//            if(gamepad2.left_stick_button){
-//                team=true;
-//            }
-//            if(gamepad2.right_stick_button){
-//                team=false;
-//            }
+            if(gamepad2.left_stick_button){
+                team=true;
+            }
+            if(gamepad2.right_stick_button){
+                team=false;
+            }
 //
-//            if(team) {
-////                limelight.pipelineSwitch(1);
-//                Team="blue";
-//            }
-//            if(!team) {
-////                limelight.pipelineSwitch(2);
-//                Team="red";
-//            }
+
+            if(team) {
+                limelight.pipelineSwitch(1);
+                Team="blue";
+            }
+            if(!team) {
+                limelight.pipelineSwitch(2);
+                Team="red";
+            }
+
+
+            if((result.getTx())<10&& result.getTx()>-10&& result.getTx()!=0&&team){
+                 CanLaunch="Yes:blue";
+//            Launch.setVelocity(far);
+            }
+            
+            if((result.getTx())<10&& result.getTx()>-10&& result.getTx()!=0&&!team){
+                CanLaunch="Yes:red";
+//            Launch.setVelocity(far);
+            }
+
+            else {
+                 CanLaunch="No";
+            }
+            if(result.getTa()<1){
+                closefar="far";
+            }
+            else if(result.getTa()>.5){
+                closefar="close";
+            }
+            else{
+                closefar="can't shoot";
+            }
+
 //
 //
 //            telemetry.update();
@@ -403,19 +435,22 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("argb",  color.argb());
 //            telemetry.addData("color:",Color);
 //
-//            telemetry.addData("team:",Team);
+            telemetry.addData("team:",Team);
 //
 
-            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
+//            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
 ////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
-////            telemetry.addData("x",result.getTx());
-////              telemetry.addData("x",result.get;
+            telemetry.addData("x",result.getTx());
+              telemetry.addData("x",result.getTa());
 //            telemetry.addData("TPS", TPS);
 //            telemetry.addData("launchtarget", launchTarget);
 
 //            telemetry.addData("Target",TargetVelocity);
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
+            telemetry.addData("can Launch?:",CanLaunch);
+            telemetry.addData("Distance:",closefar);
+
             telemetry.addData("launch",Launch.getVelocity()/28);
 //            telemetry.addData("color1",color1);
 //            telemetry.addData("color2",color2);

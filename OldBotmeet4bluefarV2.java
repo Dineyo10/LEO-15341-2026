@@ -104,17 +104,14 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
 
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,50,0,AngleUnit.DEGREES,22);
-//    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1400,200,AngleUnit.DEGREES,0);
     static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 590, 300, AngleUnit.DEGREES, 90);
     static final Pose2D TARGET_3_Left = new Pose2D(DistanceUnit.MM, 580, 1100, AngleUnit.DEGREES, 90);
-//    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 1292, 300, AngleUnit.DEGREES, 90);
-//    static final Pose2D TARGET_3_Center = new Pose2D(DistanceUnit.MM, 1292, 974, AngleUnit.DEGREES, 90);
-//    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 1777, 300, AngleUnit.DEGREES, 90);
-//    static final Pose2D TARGET_3_Right = new Pose2D(DistanceUnit.MM, 1777, 960, AngleUnit.DEGREES, 90);
-
-//    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-680,800, AngleUnit.DEGREES,45);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 50, 0, AngleUnit.DEGREES, 22);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 700, 0, AngleUnit.DEGREES, 0);
+
+
+
+
 
     static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -270, 520, AngleUnit.DEGREES, 45);
 
@@ -242,7 +239,7 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
             telemetry.addLine("21,left");
         }
         if(AprilTagID== 22){
-            telemetry.addLine("22,middlle");
+            telemetry.addLine("22,middle");
         }
         if(AprilTagID== 23){
             telemetry.addLine("23,right");
@@ -253,7 +250,7 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
         resetRuntime();
-////
+
 
         while (opModeIsActive()) {
             odo.update();
