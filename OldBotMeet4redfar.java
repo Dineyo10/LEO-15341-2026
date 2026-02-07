@@ -628,7 +628,7 @@ public class OldBotMeet4redfar extends LinearOpMode {
         Revolver.setTargetPosition(320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2500);
+        sleep(1800);
         flick.setPosition(.78);
         sleep(1000);
 //        Launch.setPower(.55);
@@ -636,20 +636,20 @@ public class OldBotMeet4redfar extends LinearOpMode {
         Revolver.setTargetPosition(640+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2000);
+        sleep(1800);
         flick.setPosition(.78);
-        sleep(800);
+        sleep(600);
         flick.setPosition(.3);
 //        Launch.setPower(.75);
 //    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(960+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2500);
+        sleep(1800);
         flick.setPosition(.78);
-        sleep(800);
+        sleep(600);
         flick.setPosition(.3);
-        sleep(700);
+//        sleep(700);
 //        Launch.setVelocity(0);
 //        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -666,7 +666,7 @@ public class OldBotMeet4redfar extends LinearOpMode {
     private void Stopintake() {
         intake.setPower(0);
 //        Revolver.setPower(0);
-        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        side1.setPower(0);
 //        side2.setPower(0);
 //        if (Revolver.getCurrentPosition() < -160 * 7){
