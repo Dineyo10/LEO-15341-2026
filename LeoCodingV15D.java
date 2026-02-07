@@ -54,7 +54,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //    private DcMotor Launch;
     private DcMotorEx Launch;
     private Servo flick;
-    private DistanceSensor Distance;
+//    private DistanceSensor Distance;
 
     private String color1;
     private String color2;
@@ -66,9 +66,12 @@ public class LeoCodingV15D extends LinearOpMode {
 
 //    private DcMotor test;
 
-    private ColorSensor color;
+//    private ColorSensor color;
 
     private ColorSensor top;
+
+    private ColorSensor top2;
+
 
     int revolverpos=1;
 
@@ -77,6 +80,14 @@ public class LeoCodingV15D extends LinearOpMode {
 
     private int AprilTagID;
     private Limelight3A limelight;
+
+    GoBildaPrismDriver prism;
+    PrismAnimations.Solid purple = new PrismAnimations.Solid(Color.PURPLE);
+
+    PrismAnimations.Solid green = new PrismAnimations.Solid(Color.GREEN);
+
+
+
 
     private boolean team;
 //
@@ -93,6 +104,9 @@ public class LeoCodingV15D extends LinearOpMode {
 
     static final double     COUNTS_PER_MOTOR_REV    = 28.0;
     static final double     TARGET_RPM    = 600;
+
+
+
 
 
     @Override
@@ -130,15 +144,33 @@ public class LeoCodingV15D extends LinearOpMode {
         side2 = hardwareMap.get(CRServo.class, "side2");
 
 
-        color = hardwareMap.get(ColorSensor.class, "color");
-        Distance = hardwareMap.get(DistanceSensor.class, "Distance");
+//        color = hardwareMap.get(ColorSensor.class, "color");
+        top = hardwareMap.get(ColorSensor.class, "top");
 
+        top2 = hardwareMap.get(ColorSensor.class, "top");
+
+//        Distance = hardwareMap.get(DistanceSensor.class, "Distance");
+
+        prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.start();
 
         limelight.pipelineSwitch(0);
 
+        green.setBrightness(75);
+        green.setStartIndex(0);
+        green.setStopIndex(12);
+
+        purple.setBrightness(75);
+        purple.setStartIndex(0);
+        purple.setStopIndex(12);
+
+        telemetry.addData("Device ID: ", prism.getDeviceID());
+        telemetry.addData("Firmware Version: ", prism.getFirmwareVersionString());
+        telemetry.addData("Hardware Version: ", prism.getHardwareVersionString());
+        telemetry.addData("Power Cycle Count: ", prism.getPowerCycleCount());
+        telemetry.update();
 
 //            if(limelight.)
 //        telemetry.addData("",limelight.updateRobotOrientation(50));
@@ -216,6 +248,29 @@ public class LeoCodingV15D extends LinearOpMode {
                 left_back.setPower((LB_Power) * .4);
                 right_back.setPower((RB_Power) * .4);
             }
+            int Green= (top.green()+top2.green())/2;
+
+            int Blue= (top.blue()+top2.blue())/2;
+
+            int Red= (top.red()+top2.red())/2;
+
+            if(time>.25) {
+                if (Blue > Green && Blue > Red && Blue > 100 ) {
+//            if(gamepad1.b) {
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_0, purple);
+//            }
+                } else if (Green > Blue && Green > Red && Green > 100) {
+//            if(gamepad1.a){
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_0, green);
+                } else {
+//            if(gamepad1.a) {
+                    prism.clearAllAnimations();
+//            }
+                }
+                resetRuntime();
+            }
+//
+
 
             //manual control of revolver
             Revolver.setPower((gamepad2.left_stick_y)*.7);
@@ -261,6 +316,7 @@ public class LeoCodingV15D extends LinearOpMode {
             //flick control
             if(gamepad2.right_bumper){
                 flick.setPosition(0.77);
+
 //                sleep(500);
 //                sleep(500);
             }
@@ -269,7 +325,8 @@ public class LeoCodingV15D extends LinearOpMode {
             }
             //flick stays out when button not pressed
             else{
-                flick.setPosition(.45);
+
+                flick.setPosition(.30);
             }
             //intake control, keep slow
             intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*.9);
@@ -355,9 +412,9 @@ public class LeoCodingV15D extends LinearOpMode {
                 revolverpos--;
             }
 
-            if(revolverpos==1) color1=SetColor();
-            if(revolverpos==3) color2=SetColor();
-            if(revolverpos==5) color3=SetColor();
+//            if(revolverpos==1) color1=SetColor();
+//            if(revolverpos==3) color2=SetColor();
+//            if(revolverpos==5) color3=SetColor();
 
 
             if(revolverpos>=7){
@@ -473,31 +530,43 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("RedValue",  color.red());
 //            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("GreenValue",  color.green());
+
+            telemetry.addData("RedValue",  top.red());
+            telemetry.addData("BlueValue", top.blue());
+            telemetry.addData("GreenValue",  top.green());
+
+            telemetry.addData("RedValue",  top2.red());
+            telemetry.addData("BlueValue", top2.blue());
+            telemetry.addData("GreenValue",  top2.green());
+
 //            telemetry.addData("argb",  color.argb());
 //            telemetry.addData("color:",Color);
 //
             telemetry.addData("team:",Team);
+
+            telemetry.addData("time:",time);
+
 //
 
 ////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
-            telemetry.addData("x",result.getTx());
-              telemetry.addData("x",result.getTa());
+//            telemetry.addData("x",result.getTx());
+//              telemetry.addData("x",result.getTa());
 //            telemetry.addData("TPS", TPS);
 //            telemetry.addData("launchtarget", launchTarget);
 
 //            telemetry.addData("Target",TargetVelocity);
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
-            telemetry.addData("can Launch?:",CanLaunch);
-            telemetry.addData("Distance:",closefar);
+//            telemetry.addData("can Launch?:",CanLaunch);
+//            telemetry.addData("Distance:",closefar);
 
             telemetry.addData("launch",Launch.getVelocity()/28);
-            telemetry.addData("color1",color1);
-            telemetry.addData("color2",color2);
-            telemetry.addData("color3",color3);
-            telemetry.addData("lastpos",lastpos);
-            telemetry.addData("currentpos",revolverpos);
-            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
+//            telemetry.addData("color1",color1);
+//            telemetry.addData("color2",color2);
+//            telemetry.addData("color3",color3);
+//            telemetry.addData("lastpos",lastpos);
+//            telemetry.addData("currentpos",revolverpos);
+//            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
@@ -516,20 +585,20 @@ public class LeoCodingV15D extends LinearOpMode {
 
     }
 
-    private String SetColor() {
-        String Colors;
-        if (color.blue() > color.green() &&color.blue()>color.red() && color.blue() > 100) {
-            Colors = "purple";
-        } else if (color.green() > color.blue() && color.green()>color.red() &&color.green() > 100) {
-            Colors = "green";
-        } else if (color.red() > color.blue() && color.red()>color.green()&& color.red() > 100){
-            Colors = "none";
-        }
-        else {
-            Colors="none";
-        }
-        return Colors;
-    }
+//    private String SetColor() {
+//        String Colors;
+//        if (color.blue() > color.green() &&color.blue()>color.red() && color.blue() > 100) {
+//            Colors = "purple";
+//        } else if (color.green() > color.blue() && color.green()>color.red() &&color.green() > 100) {
+//            Colors = "green";
+//        } else if (color.red() > color.blue() && color.red()>color.green()&& color.red() > 100){
+//            Colors = "none";
+//        }
+//        else {
+//            Colors="none";
+//        }
+//        return Colors;
+//    }
 
 //    public void setColor(){
 //
