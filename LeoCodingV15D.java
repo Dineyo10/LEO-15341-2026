@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import static org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver.LayerHeight;
+
+
 import org.firstinspires.ftc.teamcode.Prism.Color;
 import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
@@ -215,7 +218,7 @@ public class LeoCodingV15D extends LinearOpMode {
             }
 
             //manual control of revolver
-            Revolver.setPower((gamepad2.left_stick_y)*.6);
+            Revolver.setPower((gamepad2.left_stick_y)*.7);
 //
             //reset revolver encoder
 //            if(gamepad2.start){
@@ -257,7 +260,9 @@ public class LeoCodingV15D extends LinearOpMode {
 
             //flick control
             if(gamepad2.right_bumper){
-                flick.setPosition(0.8);
+                flick.setPosition(0.77);
+//                sleep(500);
+//                sleep(500);
             }
             else if(gamepad2.a ||gamepad2.b){
                 flick.setPosition(0.45);
@@ -338,13 +343,13 @@ public class LeoCodingV15D extends LinearOpMode {
 
             }
 
-            if((lastpos - Revolver.getCurrentPosition())>=160&&(lastpos<Revolver.getCurrentPosition())){
+            if((lastpos - Revolver.getCurrentPosition())>=160&&(lastpos>Revolver.getCurrentPosition())){
                 lastpos=Revolver.getCurrentPosition();
 //            lastpos=revolverpos*160;
                 revolverpos++;
             }
-
-            else if(((lastpos - Revolver.getCurrentPosition())<=-160)&&(lastpos>Revolver.getCurrentPosition())){
+                //      0        161
+            else if(((lastpos - Revolver.getCurrentPosition())<=-160)&&(lastpos<Revolver.getCurrentPosition())){
                 lastpos=Revolver.getCurrentPosition();
 //                lastpos=revolverpos*160;
                 revolverpos--;
@@ -474,7 +479,6 @@ public class LeoCodingV15D extends LinearOpMode {
             telemetry.addData("team:",Team);
 //
 
-//            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
 ////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
             telemetry.addData("x",result.getTx());
               telemetry.addData("x",result.getTa());
@@ -488,11 +492,12 @@ public class LeoCodingV15D extends LinearOpMode {
             telemetry.addData("Distance:",closefar);
 
             telemetry.addData("launch",Launch.getVelocity()/28);
-//            telemetry.addData("color1",color1);
-//            telemetry.addData("color2",color2);
-//            telemetry.addData("color3",color3);
-//            telemetry.addData("lastpos",lastpos);
-//            telemetry.addData("currentpos",revolverpos);
+            telemetry.addData("color1",color1);
+            telemetry.addData("color2",color2);
+            telemetry.addData("color3",color3);
+            telemetry.addData("lastpos",lastpos);
+            telemetry.addData("currentpos",revolverpos);
+            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());
