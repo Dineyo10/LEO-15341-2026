@@ -339,6 +339,19 @@ public class LeoCodingV15D extends LinearOpMode {
 //            int close= 28*1/60;
 
             //fast button 28 is how many ticks per rev
+
+            if(gamepad2.a){
+                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Revolver.setTargetPosition(160);
+                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Revolver.setPower(.8);
+                sleep(700);
+                flick.setPosition(.78);
+                sleep(600);
+                Revolver.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+            }
+            
             if(gamepad2.dpad_up){
                 Launch.setVelocity(far);
 //                Launch.setPower(.7);
