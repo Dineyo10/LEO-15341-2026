@@ -229,33 +229,7 @@ public class OldBotMeet4redclose extends LinearOpMode {
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
 
-        LLResult result = limelight.getLatestResult();
 
-        if (result != null && result.isValid()) {
-            List<FiducialResult> fiducials = result.getFiducialResults();
-
-            if (!fiducials.isEmpty()) {
-                // Grab the first detected tag
-                AprilTagID = fiducials.get(0).getFiducialId();
-
-                telemetry.addData("Detected AprilTag", AprilTagID);
-            } else {
-                telemetry.addLine("No AprilTags detected");
-            }
-        } else {
-            telemetry.addLine("Limelight: No valid results");
-        }
-
-        if(AprilTagID== 21){
-            telemetry.addLine("21,left");
-        }
-        if(AprilTagID== 22){
-            telemetry.addLine("22,middle");
-        }
-        if(AprilTagID== 23){
-            telemetry.addLine("23,right");
-        }
-        telemetry.update();
 
 
         // Wait for the game to start (driver presses START)
@@ -328,7 +302,33 @@ public class OldBotMeet4redclose extends LinearOpMode {
             switch (stateMachine){
                 case WAITING_FOR_START:
                     //the first step in the autonomous
+                    LLResult result = limelight.getLatestResult();
 
+                    if (result != null && result.isValid()) {
+                        List<FiducialResult> fiducials = result.getFiducialResults();
+
+                        if (!fiducials.isEmpty()) {
+                            // Grab the first detected tag
+                            AprilTagID = fiducials.get(0).getFiducialId();
+
+                            telemetry.addData("Detected AprilTag", AprilTagID);
+                        } else {
+                            telemetry.addLine("No AprilTags detected");
+                        }
+                    } else {
+                        telemetry.addLine("Limelight: No valid results");
+                    }
+
+                    if(AprilTagID== 21){
+                        telemetry.addLine("21,left");
+                    }
+                    if(AprilTagID== 22){
+                        telemetry.addLine("22,middle");
+                    }
+                    if(AprilTagID== 23){
+                        telemetry.addLine("23,right");
+                    }
+                    telemetry.update();
                     stateMachine = StateMachine.DRIVE_TO_TARGET_0;
                     break;
                 case DRIVE_TO_TARGET_0:

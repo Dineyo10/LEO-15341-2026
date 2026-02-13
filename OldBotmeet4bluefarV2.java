@@ -22,7 +22,7 @@ import java.util.List;
 
 import java.util.Locale;
 
-@Autonomous(name="OldBotmeet4bluefarV2", group="Auto")
+@Autonomous(name="OldBotmeet4bluefarV2", group="blue")
 //@Disabled
 
 public class OldBotmeet4bluefarV2 extends LinearOpMode {
@@ -42,6 +42,9 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
     private CRServo side2;
 //    private ColorSensor color;
 
+        private ColorSensor top;
+
+
 
     private int AprilTagID;
     private Limelight3A limelight;
@@ -51,7 +54,7 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
     private String Team;
 
     private String Color;
-    private ColorSensor color;
+//    private ColorSensor color;
     int revolverpos=1;
     private String color1;
     private String color2;
@@ -170,7 +173,7 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
         limelight.pipelineSwitch(0);
 
 
-        color = hardwareMap.get(ColorSensor.class, "color");
+//        color = hardwareMap.get(ColorSensor.class, "color");
 //        Launch1.setDirection(DcMotorSimple.Direction.REVERSE);
 //        Intake2.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -217,33 +220,7 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
 
-        LLResult result = limelight.getLatestResult();
 
-        if (result != null && result.isValid()) {
-            List<FiducialResult> fiducials = result.getFiducialResults();
-
-            if (!fiducials.isEmpty()) {
-                // Grab the first detected tag
-                AprilTagID = fiducials.get(0).getFiducialId();
-
-                telemetry.addData("Detected AprilTag", AprilTagID);
-            } else {
-                telemetry.addLine("No AprilTags detected");
-            }
-        } else {
-            telemetry.addLine("Limelight: No valid results");
-        }
-
-        if(AprilTagID== 21){
-            telemetry.addLine("21,left");
-        }
-        if(AprilTagID== 22){
-            telemetry.addLine("22,middle");
-        }
-        if(AprilTagID== 23){
-            telemetry.addLine("23,right");
-        }
-        telemetry.update();
 
 
         // Wait for the game to start (driver presses START)
@@ -316,7 +293,33 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
             switch (stateMachine){
                 case WAITING_FOR_START:
                     //the first step in the autonomous
+                    LLResult result = limelight.getLatestResult();
 
+                    if (result != null && result.isValid()) {
+                        List<FiducialResult> fiducials = result.getFiducialResults();
+
+                        if (!fiducials.isEmpty()) {
+                            // Grab the first detected tag
+                            AprilTagID = fiducials.get(0).getFiducialId();
+
+                            telemetry.addData("Detected AprilTag", AprilTagID);
+                        } else {
+                            telemetry.addLine("No AprilTags detected");
+                        }
+                    } else {
+                        telemetry.addLine("Limelight: No valid results");
+                    }
+
+                    if(AprilTagID== 21){
+                        telemetry.addLine("21,left");
+                    }
+                    if(AprilTagID== 22){
+                        telemetry.addLine("22,middle");
+                    }
+                    if(AprilTagID== 23){
+                        telemetry.addLine("23,right");
+                    }
+                    telemetry.update();
                     stateMachine = StateMachine.DRIVE_TO_TARGET_1;
                     break;
                 case DRIVE_TO_TARGET_1:
@@ -356,21 +359,21 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
 //                        stateMachine = StateMachine.DRIVE_TO_TARGET_2;
                         stateMachine = StateMachine.DRIVE_TO_TARGET_2_Left;
 
-                        if (AprilTagID==21) {
-                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Left;
-                            telemetry.addLine("Pattern 1");
-
-                        }
-                        else if (AprilTagID==22) {
-//                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Center;
-                            telemetry.addLine("Pattern 2");
-
-                        }
-                        else{
-//                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Right;
-                            telemetry.addLine("Pattern 3");
-
-                        }
+//                        if (AprilTagID==21) {
+//                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Left;
+//                            telemetry.addLine("Pattern 1");
+//
+//                        }
+//                        else if (AprilTagID==22) {
+////                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Center;
+//                            telemetry.addLine("Pattern 2");
+//
+//                        }
+//                        else{
+////                            stateMachine = StateMachine.DRIVE_TO_TARGET_2_Right;
+//                            telemetry.addLine("Pattern 3");
+//
+//                        }
                     }
 //                    break;
 //                case DRIVE_TO_TARGET_2:
@@ -567,44 +570,46 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
         flick.setPosition(.78);
         sleep(1000);
 //        Launch.setPower(.55);
-        flick.setPosition(.45);
+        flick.setPosition(.3);
         Revolver.setTargetPosition(320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2500);
+        sleep(2000);
         flick.setPosition(.78);
         sleep(800);
-        flick.setPosition(.45);
+        flick.setPosition(.3);
 //        Launch.setPower(.75);
 //    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(640+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2500);
+        sleep(2000);
         flick.setPosition(.78);
         sleep(800);
-        flick.setPosition(.45);
+        flick.setPosition(.3);
         sleep(700);
 //        Launch.setVelocity(0);
 //        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-    private void launch22(){Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    private void launch22(){
+        flick.setPosition(.3);
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(-320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        sleep(1900);
+        sleep(1500);
         flick.setPosition(.78);
-        sleep(800);
+        sleep(600);
 //        Launch.setPower(.55);
-        flick.setPosition(.45);
+        flick.setPosition(.3);
         Revolver.setTargetPosition(0+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
         sleep(1900);
         flick.setPosition(.78);
-        sleep(800);
-        flick.setPosition(.45);
+        sleep(600);
+        flick.setPosition(.3);
 //        Launch.setPower(.75);
 //    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(320+change);
@@ -612,9 +617,9 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
         Revolver.setPower(.8);
         sleep(1900);
         flick.setPosition(.78);
-        sleep(800);
-        flick.setPosition(.45);
-        sleep(700);
+        sleep(600);
+        flick.setPosition(.3);
+//        sleep(700);
 //        Launch.setVelocity(0);
 //        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -623,28 +628,28 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
         Revolver.setTargetPosition(320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2500);
-        flick.setPosition(.78);
-        sleep(1000);
-//        Launch.setPower(.55);
-        flick.setPosition(.45);
-        Revolver.setTargetPosition(640+change);
-        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Revolver.setPower(.7);
         sleep(2000);
         flick.setPosition(.78);
         sleep(800);
-        flick.setPosition(.45);
+//        Launch.setPower(.55);
+        flick.setPosition(.3);
+        Revolver.setTargetPosition(640+change);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.7);
+        sleep(1800);
+        flick.setPosition(.78);
+        sleep(700);
+        flick.setPosition(.3);
 //        Launch.setPower(.75);
 //    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(960+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2500);
+        sleep(1800);
         flick.setPosition(.78);
         sleep(800);
-        flick.setPosition(.45);
-        sleep(700);
+        flick.setPosition(.3);
+//        sleep(700);
 //        Launch.setVelocity(0);
 //        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -681,18 +686,18 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
         sleep(1500);
 
     }
-    private String SetColor() {
-        String Colors;
-        if (color.blue() > color.green() &&color.blue()>color.red() && color.blue() > 100) {
-            Colors = "purple";
-        } else if (color.green() > color.blue() && color.green()>color.red() &&color.green() > 100) {
-            Colors = "green";
-        } else if (color.red() > color.blue() && color.red()>color.green()&& color.red() > 100){
-            Colors = "none";
-        }
-        else {
-            Colors="none";
-        }
-        return Colors;
-    }
+//    private String SetColor() {
+//        String Colors;
+//        if (color.blue() > color.green() &&color.blue()>color.red() && color.blue() > 100) {
+//            Colors = "purple";
+//        } else if (color.green() > color.blue() && color.green()>color.red() &&color.green() > 100) {
+//            Colors = "green";
+//        } else if (color.red() > color.blue() && color.red()>color.green()&& color.red() > 100){
+//            Colors = "none";
+//        }
+//        else {
+//            Colors="none";
+//        }
+//        return Colors;
+//    }
 }

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteException;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -35,7 +36,7 @@ import java.util.List;
 
 import java.util.Locale;
 
-@Autonomous(name="OldBotmeet4blueclose", group="Auto")
+@Autonomous(name="OldBotmeet4blueclose", group="blue")
 //@Disabled
 
 public class OldBotmeet4blueclose extends LinearOpMode {
@@ -54,6 +55,8 @@ public class OldBotmeet4blueclose extends LinearOpMode {
     private CRServo side1;
     private CRServo side2;
 //    private ColorSensor color;
+
+        private ColorSensor top;
 
 
     private int AprilTagID;
@@ -108,14 +111,14 @@ public class OldBotmeet4blueclose extends LinearOpMode {
         DRIVE_TO_TARGET_20
     }
 
-    static final Pose2D TARGET_0 = new Pose2D(DistanceUnit.MM,-1250,0,AngleUnit.DEGREES,0);
+    static final Pose2D TARGET_0 = new Pose2D(DistanceUnit.MM,-1200,0,AngleUnit.DEGREES,0);
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,-1250,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1400,200,AngleUnit.DEGREES,55);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1350,200,AngleUnit.DEGREES,55);
 //    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, -700, 750, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-620,820, AngleUnit.DEGREES,45);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-820,710, AngleUnit.DEGREES,45);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
 
@@ -157,6 +160,9 @@ public class OldBotmeet4blueclose extends LinearOpMode {
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
+                top = hardwareMap.get(ColorSensor.class, "top");
+
+
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "LD");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "RD");
         leftBackDrive   = hardwareMap.get(DcMotor.class, "LB");
@@ -223,33 +229,7 @@ public class OldBotmeet4blueclose extends LinearOpMode {
         telemetry.addData("Device Scalar", odo.getYawScalar());
         telemetry.update();
 
-        LLResult result = limelight.getLatestResult();
 
-        if (result != null && result.isValid()) {
-            List<FiducialResult> fiducials = result.getFiducialResults();
-
-            if (!fiducials.isEmpty()) {
-                // Grab the first detected tag
-                AprilTagID = fiducials.get(0).getFiducialId();
-
-                telemetry.addData("Detected AprilTag", AprilTagID);
-            } else {
-                telemetry.addLine("No AprilTags detected");
-            }
-        } else {
-            telemetry.addLine("Limelight: No valid results");
-        }
-
-        if(AprilTagID== 21){
-            telemetry.addLine("21,left");
-        }
-        if(AprilTagID== 22){
-            telemetry.addLine("22,middle");
-        }
-        if(AprilTagID== 23){
-            telemetry.addLine("23,right");
-        }
-        telemetry.update();
 
 
         // Wait for the game to start (driver presses START)
@@ -322,12 +302,40 @@ public class OldBotmeet4blueclose extends LinearOpMode {
             switch (stateMachine){
                 case WAITING_FOR_START:
                     //the first step in the autonomous
+                    LLResult result = limelight.getLatestResult();
+
+                    if (result != null && result.isValid()) {
+                        List<FiducialResult> fiducials = result.getFiducialResults();
+
+                        if (!fiducials.isEmpty()) {
+                            // Grab the first detected tag
+                            AprilTagID = fiducials.get(0).getFiducialId();
+
+                            telemetry.addData("Detected AprilTag", AprilTagID);
+                        } else {
+                            telemetry.addLine("No AprilTags detected");
+                        }
+                    } else {
+                        telemetry.addLine("Limelight: No valid results");
+                    }
+
+                    if(AprilTagID== 21){
+                        telemetry.addLine("21,left");
+                    }
+                    if(AprilTagID== 22){
+                        telemetry.addLine("22,middle");
+                    }
+                    if(AprilTagID== 23){
+                        telemetry.addLine("23,right");
+                    }
+                    telemetry.update();
 
                     stateMachine = StateMachine.DRIVE_TO_TARGET_0;
                     break;
                 case DRIVE_TO_TARGET_0:
 //                    launch1();
                     Launch.setVelocity(close);
+                    intake.setPower(1);
                     if(nav.driveTo(odo.getPosition(), TARGET_0, .7, 1)){
                         telemetry.addLine("at position #7");
 //                        transfer();
@@ -340,14 +348,11 @@ public class OldBotmeet4blueclose extends LinearOpMode {
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
                 case DRIVE_TO_TARGET_1:
-                    if (nav.driveTo(odo.getPosition(), TARGET_1, .2, .5)) {
+                    if (nav.driveTo(odo.getPosition(), TARGET_1, .4, .2)) {
 //                    Stopper.setPower(.3);
 //                        Revolver.setTargetPosition(160);
 //                        sleep(500);
 
-
-//
-                        intake.setPower(1);
                             launch21();
 
 //                        sleep(5000);
@@ -378,9 +383,9 @@ public class OldBotmeet4blueclose extends LinearOpMode {
                     }
                     break;
                 case DRIVE_TO_TARGET_3:
-                    if (nav.driveTo(odo.getPosition(), TARGET_3, .4, 2)){
+                    if (nav.driveTo(odo.getPosition(), TARGET_3, .4, 3)){
 //                        intake();
-//                        change=160;
+//                        change=0;
                         telemetry.addLine("at position #2!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_4;
 
@@ -437,7 +442,7 @@ public class OldBotmeet4blueclose extends LinearOpMode {
                     if(nav.driveTo(odo.getPosition(),TARGET_4,.8,.5)){
                         telemetry.addLine("at position #4");
                         Stopintake();
-                        SpinUpshort();
+//                        SpinUpshort();
                             launch21();
 
 
@@ -446,8 +451,9 @@ public class OldBotmeet4blueclose extends LinearOpMode {
                     }
                     break;
                 case DRIVE_TO_TARGET_5:
-                    if(nav.driveTo(odo.getPosition(),TARGET_5,.7,0.1)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_5,.4,0.1)){
                         telemetry.addLine("at position #5!");
+                        intake.setPower(0);
 //                        Stopintake();
 //                        launch2();
                         stateMachine = StateMachine.DRIVE_TO_TARGET_6;
@@ -455,7 +461,7 @@ public class OldBotmeet4blueclose extends LinearOpMode {
                     break;
                 case DRIVE_TO_TARGET_6:
                     if(nav.driveTo(odo.getPosition(), TARGET_6, 1, 0.1)){
-
+                    Launch.setVelocity(0);
                         telemetry.addLine("at position #6");
 //                        transfer();
                         stateMachine = StateMachine.AT_TARGET;
@@ -539,34 +545,40 @@ public class OldBotmeet4blueclose extends LinearOpMode {
 
     }
     private void launch21(){
+        flick.setPosition(.3);
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(0+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        sleep(1500);
+        if (change==160){
+            sleep(1500);
+        }
+        if (change==0){
+            sleep(100);
+        }
         flick.setPosition(.78);
-        sleep(1000);
+        sleep(800);
 //        Launch.setPower(.55);
-        flick.setPosition(.45);
+        flick.setPosition(.3);
         Revolver.setTargetPosition(320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        sleep(2000);
+        sleep(1500);
         flick.setPosition(.78);
         sleep(800);
-        flick.setPosition(.45);
+        flick.setPosition(.3);
 //        Launch.setPower(.75);
 //    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(640+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        sleep(2000);
+        sleep(1500);
         flick.setPosition(.78);
         sleep(800);
-        flick.setPosition(.45);
-        sleep(700);
+        flick.setPosition(.3);
+//        sleep(700);
 //        Launch.setVelocity(0);
-//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
     private void launch22(){Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -639,9 +651,9 @@ public class OldBotmeet4blueclose extends LinearOpMode {
 //        sleep(1000);
     }
     private void Stopintake() {
-        intake.setPower(0);
+//        intake.setPower(0);
 //        Revolver.setPower(0);
-        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        side1.setPower(0);
 //        side2.setPower(0);
 //        if (Revolver.getCurrentPosition() < -160 * 7){

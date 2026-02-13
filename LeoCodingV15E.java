@@ -16,6 +16,9 @@ import org.firstinspires.ftc.teamcode.Prism.Color;
 import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 
+import java.sql.Time;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -24,7 +27,9 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -40,9 +45,9 @@ import java.util.Set;
 import javax.sql.RowSetEvent;
 
 //this is for the meet 3 bot between meet 3 and 4
-@Disabled
+//@Disabled
 @TeleOp
-public class LeoCodingV15D extends LinearOpMode {
+public class LeoCodingV15E extends LinearOpMode {
     private DcMotor left_drive;
     private DcMotor right_drive;
     private DcMotor left_back;
@@ -52,7 +57,7 @@ public class LeoCodingV15D extends LinearOpMode {
     private CRServo side1;
     private CRServo side2;
     private DcMotor Revolver;
-//    private DcMotor Launch;
+    //    private DcMotor Launch;
     private DcMotorEx Launch;
     private Servo flick;
 //    private DistanceSensor Distance;
@@ -60,6 +65,15 @@ public class LeoCodingV15D extends LinearOpMode {
     private String color1;
     private String color2;
     private String color3;
+
+    Timer flicktime = new Timer();
+
+//    TimerTask flicktask = new TimerTask();
+
+//    public volatile double colorTime;
+
+//    long colorTime = System.currentTimeMillis();
+
 
     private String CanLaunch;
     private String closefar;
@@ -73,7 +87,6 @@ public class LeoCodingV15D extends LinearOpMode {
 
     private ColorSensor top2;
 
-
     int revolverpos=1;
 
     int lastpos=0;
@@ -83,19 +96,33 @@ public class LeoCodingV15D extends LinearOpMode {
     private Limelight3A limelight;
 
     GoBildaPrismDriver prism;
+
+
     PrismAnimations.Solid purple = new PrismAnimations.Solid(Color.PURPLE);
 
     PrismAnimations.Solid green = new PrismAnimations.Solid(Color.GREEN);
+
+    PrismAnimations.Solid launchlight = new PrismAnimations.Solid(Color.RED);
+
+    PrismAnimations.Solid launchlight2 = new PrismAnimations.Solid(Color.RED);
+
+    PrismAnimations.Solid launchlightoff = new PrismAnimations.Solid(new Color( 1, 1, 1));
+
+    PrismAnimations.Solid launchlight2off = new PrismAnimations.Solid(new Color( 1, 1, 1));
+
+    PrismAnimations.Solid clear = new PrismAnimations.Solid(new Color( 1, 1, 1));
 
 
 
 
     private boolean team;
-//
+    //
     private String Team;
     double far=57*28;
 
     double close=49*28;
+
+    double targetVelocity=close;
 //
 //    private String Color;
 
@@ -159,6 +186,12 @@ public class LeoCodingV15D extends LinearOpMode {
 
         limelight.pipelineSwitch(0);
 
+        prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
+        prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_1);
+        prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_2);
+
+
+
         green.setBrightness(75);
         green.setStartIndex(0);
         green.setStopIndex(12);
@@ -166,6 +199,29 @@ public class LeoCodingV15D extends LinearOpMode {
         purple.setBrightness(75);
         purple.setStartIndex(0);
         purple.setStopIndex(12);
+
+        launchlight.setBrightness(75);
+        launchlight.setStartIndex(0);
+        launchlight.setStopIndex(1);
+
+        launchlight2.setBrightness(75);
+        launchlight2.setStartIndex(4);
+        launchlight2.setStopIndex(5);
+
+        launchlightoff.setBrightness(10);
+        launchlightoff.setStartIndex(0);
+        launchlightoff.setStopIndex(1);
+
+        launchlight2off.setBrightness(10);
+        launchlight2off.setStartIndex(4);
+        launchlight2off.setStopIndex(5);
+
+
+        clear.setBrightness(10);
+        clear.setStartIndex(0);
+        clear.setStopIndex(11);
+
+
 
         telemetry.addData("Device ID: ", prism.getDeviceID());
         telemetry.addData("Firmware Version: ", prism.getFirmwareVersionString());
@@ -176,7 +232,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //            if(limelight.)
 //        telemetry.addData("",limelight.updateRobotOrientation(50));
 
-                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Launch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -216,7 +272,7 @@ public class LeoCodingV15D extends LinearOpMode {
 ////        int rightTarget = (int)(610 * COUNTS_PER_MM);
 //        double TPS = (60/ 60) * COUNTS_PER_WHEEL_REV;
 
-        double TargetVelocity = (TARGET_RPM*COUNTS_PER_MOTOR_REV)/60.0;
+//        double TargetVelocity = (TARGET_RPM*COUNTS_PER_MOTOR_REV)/60.0;
 
         boolean pressed = false;
 
@@ -249,80 +305,49 @@ public class LeoCodingV15D extends LinearOpMode {
                 left_back.setPower((LB_Power) * .4);
                 right_back.setPower((RB_Power) * .4);
             }
-            int Green= (top.green()+top2.green())/2;
+            int Green= (top.green()+top.green())/2;
 
-            int Blue= (top.blue()+top2.blue())/2;
+            int Blue= (top.blue()+top.blue())/2;
 
-            int Red= (top.red()+top2.red())/2;
+            int Red= (top.red()+top.red())/2;
 
             if(time>.25) {
                 if (Blue > Green && Blue > Red && Blue > 100 ) {
 //            if(gamepad1.b) {
                     prism.insertAndUpdateAnimation(LayerHeight.LAYER_0, purple);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, clear);
+
+//                    prism.updateAnimationFromIndex(LayerHeight.LAYER_0);
 //            }
                 } else if (Green > Blue && Green > Red && Green > 100) {
 //            if(gamepad1.a){
                     prism.insertAndUpdateAnimation(LayerHeight.LAYER_0, green);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, clear);
+
+//                    prism.updateAnimationFromIndex(LayerHeight.LAYER_1);
                 } else {
 //            if(gamepad1.a) {
-                    prism.clearAllAnimations();
+//                    prism.clearAllAnimations();
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_1, clear);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, purple);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, green);
+
+
+//                    prism.updateAnimationFromIndex(LayerHeight.LAYER_2);
 //            }
                 }
                 resetRuntime();
+//                time=0;
             }
-//
-
-
             //manual control of revolver
             Revolver.setPower((gamepad2.left_stick_y)*.7);
-//
-            //reset revolver encoder
-//            if(gamepad2.start){
-//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            }
-//
-////          encoder control revolver
-//            if(gamepad2.b){
-//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                r=true;
-//            }
-//
-//            if(r){
-//                Revolver.setTargetPosition(320);
-//                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                Revolver.setPower(.8);
-//            }
-//
-//            if(r && Revolver.getCurrentPosition() >= revolverpos + 315 &&
-//                    Revolver.getCurrentPosition() <= revolverpos + 325 ){
-//                r=false;
-//            }
-//
-//            if(gamepad2.a){
-//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                l=true;
-//            }
-//
-//            if(l){
-//                Revolver.setTargetPosition(160);
-//                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                Revolver.setPower(.8);
-//            }
-//
-//            if(l && Revolver.getCurrentPosition() >= revolverpos + 155 &&
-//                    Revolver.getCurrentPosition() <= revolverpos + 165 ){
-//                l=false;
-//            }
-
             //flick control
-            if(gamepad2.right_bumper){
+            if(gamepad2.right_bumper) {
                 flick.setPosition(0.77);
 
-//                sleep(500);
-//                sleep(500);
             }
-            else if(gamepad2.a ||gamepad2.b){
-                flick.setPosition(0.45);
+            else if(Math.abs(gamepad2.left_stick_y)>.001){
+                flick.setPosition(0.3);
             }
             //flick stays out when button not pressed
             else{
@@ -339,15 +364,15 @@ public class LeoCodingV15D extends LinearOpMode {
 //number in middle is rotations per minute
 //            int close= 28*1/60;
 
-            //fast button 28 is how many ticks per rev
+            //fast button * 28 is how many ticks per rev
 
             if(gamepad2.a){
                 Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Revolver.setTargetPosition(160);
+                Revolver.setTargetPosition(120);
                 Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Revolver.setPower(.8);
-                sleep(700);
+                sleep(1500);
                 flick.setPosition(.78);
                 sleep(600);
                 Revolver.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
@@ -355,15 +380,39 @@ public class LeoCodingV15D extends LinearOpMode {
 
             if(gamepad2.dpad_up){
                 Launch.setVelocity(far);
-//                Launch.setPower(.7);
+                targetVelocity=far;
             }
 
             //slow speed used more often
             if(gamepad2.dpad_down){
                 Launch.setVelocity(close);
-
-//                Launch.setPower(.55);
+                targetVelocity=close;
             }
+            if(time>.25) {
+                if (Launch.getVelocity() > targetVelocity - 2) {
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_2, launchlight);
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_3, launchlight2);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, launchlightoff);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, launchlight2off);
+
+
+//if  working y?
+                } else if (Launch.getVelocity() < targetVelocity - 2) {
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_4, launchlightoff);
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_5, launchlight2off);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, launchlight);
+                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, launchlight2);
+//                prism.updateAllAnimations();
+//if  working y?
+                }
+            }
+//            else{
+//                prism.insertAndUpdateAnimation(LayerHeight.LAYER_2, launchlightoff);
+//                prism.insertAndUpdateAnimation(LayerHeight.LAYER_2, launchlight2off);
+//
+//            }
+
+
             //stop launch
             if(gamepad2.y){
                 Launch.setVelocity(0);
@@ -371,7 +420,7 @@ public class LeoCodingV15D extends LinearOpMode {
 
             //backward launch button
             if(gamepad2.left_bumper){
-                Launch.setPower(-.5);
+                Launch.setVelocity(-500);
             }
 
 //            if(color.blue()>color.green()&& color.blue()>100){
@@ -384,26 +433,6 @@ public class LeoCodingV15D extends LinearOpMode {
 //                Color="no artifact";
 //            }
 
-
-            //old attempt
-//            if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
-//                revolverpos=1;
-////                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//            }
-//
-//
-//            if(Math.abs(lastpos - Revolver.getCurrentPosition())>160){
-//                lastpos=Revolver.getCurrentPosition();
-//                revolverpos++;
-//            }
-//
-//            if(revolverpos==1) color1=SetColor();
-//            if(revolverpos==3) color2=SetColor();
-//            if(revolverpos==5) color3=SetColor();
-//
-//            if(revolverpos==7){
-//                revolverpos=1;
-//            }
 
             //new attempt
             if(Revolver.getCurrentPosition()>960 || Revolver.getCurrentPosition()<-960) {
@@ -419,7 +448,7 @@ public class LeoCodingV15D extends LinearOpMode {
 //            lastpos=revolverpos*160;
                 revolverpos++;
             }
-                //      0        161
+            //      0        161
             else if(((lastpos - Revolver.getCurrentPosition())<=-160)&&(lastpos<Revolver.getCurrentPosition())){
                 lastpos=Revolver.getCurrentPosition();
 //                lastpos=revolverpos*160;
@@ -438,34 +467,6 @@ public class LeoCodingV15D extends LinearOpMode {
             if(revolverpos<=0){
                 revolverpos=6;
             }
-
-
-
-
-
-
-
-
-//                    if (color.blue() > color.green() && color.blue() > 100) {
-//                        color2 = "purple";
-//                    } else if (color.green() > color.blue() && color.green() > 100) {
-//                        color2 = "green";
-//                    } else {
-//                        color2 = "none";
-//                    }
-//                }
-                   //{
-//                        if (color.blue() > color.green() && color.blue() > 100) {
-//                            color3 = "purple";
-//                        } else if (color.green() > color.blue() && color.green() > 100) {
-//                            color3 = "green";
-//                        } else {
-//                            color3 = "none";
-//                        }
-//                    }
-
-
-
 
 
 
@@ -513,7 +514,7 @@ public class LeoCodingV15D extends LinearOpMode {
 
 
             if((result.getTx())<10&& result.getTx()>-10&& result.getTx()!=0&&team){
-                 CanLaunch="Yes:blue";
+                CanLaunch="Yes:blue";
 //            Launch.setVelocity(far);
             }
 
@@ -523,7 +524,7 @@ public class LeoCodingV15D extends LinearOpMode {
             }
 
             else {
-                 CanLaunch="No";
+                CanLaunch="No";
             }
             if(result.getTa()<1){
                 closefar="far";
@@ -544,11 +545,11 @@ public class LeoCodingV15D extends LinearOpMode {
 //            telemetry.addData("RedValue",  color.red());
 //            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("GreenValue",  color.green());
-
+//
             telemetry.addData("RedValue",  top.red());
             telemetry.addData("BlueValue", top.blue());
             telemetry.addData("GreenValue",  top.green());
-
+//
             telemetry.addData("RedValue",  top2.red());
             telemetry.addData("BlueValue", top2.blue());
             telemetry.addData("GreenValue",  top2.green());
@@ -560,19 +561,20 @@ public class LeoCodingV15D extends LinearOpMode {
 
             telemetry.addData("time:",time);
 
+
 //
 
 ////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
 //            telemetry.addData("x",result.getTx());
-//              telemetry.addData("x",result.getTa());
+              telemetry.addData("goal distance",result.getTa());
 //            telemetry.addData("TPS", TPS);
 //            telemetry.addData("launchtarget", launchTarget);
 
 //            telemetry.addData("Target",TargetVelocity);
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
-//            telemetry.addData("can Launch?:",CanLaunch);
-//            telemetry.addData("Distance:",closefar);
+            telemetry.addData("can Launch?:",CanLaunch);
+            telemetry.addData("Distance:",closefar);
 
             telemetry.addData("launch",Launch.getVelocity()/28);
 //            telemetry.addData("color1",color1);

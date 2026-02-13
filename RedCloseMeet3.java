@@ -4,6 +4,7 @@ import static java.lang.Math.PI;
 
 import com.qualcomm.hardware.lynx.commands.standard.LynxQueryInterfaceCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Autonomous(name="RedCloseMeet3", group="Auto")
-//@Disabled
+@Disabled
 
 public class RedCloseMeet3 extends LinearOpMode {
 
