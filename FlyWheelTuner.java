@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class FlyWheelTuner extends OpMode {
     public DcMotorEx Launch;
 
-    double far = 57 * 28;
+    double far = 49 * 28;
 
-    double close = 49 * 28;
+    double close = 0 * 28;
 
     double curTargetVelocity = far;
 
@@ -29,14 +29,18 @@ public class FlyWheelTuner extends OpMode {
         Launch = hardwareMap.get(DcMotorEx.class, "Launch");
         Launch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Launch.setDirection(DcMotorSimple.Direction.REVERSE);
-
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
+
         Launch.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         telemetry.addLine("Init Complete");
     }
 
     @Override
     public void loop() {
+        //get all our gamepad components
+        //set target velocity
+        //update telemetry
+
         if (gamepad1.yWasPressed()) {
             if (curTargetVelocity == far) {
                 curTargetVelocity = close;
@@ -46,6 +50,7 @@ public class FlyWheelTuner extends OpMode {
         if(gamepad1.bWasPressed()){
             stepIndex = (stepIndex + 1) % stepSizes.length;
         }
+
         if(gamepad1.dpadLeftWasPressed()){
             F -= stepSizes[stepIndex];
         }
@@ -59,22 +64,23 @@ public class FlyWheelTuner extends OpMode {
             P -= stepSizes[stepIndex];
         }
 
-        //set new pidfcoeff
+        //set new pidf coeff
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
         Launch.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
+        //set Velocity
         Launch.setVelocity(curTargetVelocity);
 
         double curVelocity = Launch.getVelocity();
 
-        double error = curTargetVelocity-curVelocity;
+        double error = curTargetVelocity - curVelocity;
 
         telemetry.addData("Target Velocity",curTargetVelocity);
         telemetry.addData("Current Velocity", "%.2f",curVelocity);
         telemetry.addData("Error", "%.2f", error);
         telemetry.addLine("------------------------");
         telemetry.addData("Tuning P", "%.4f (D-Pad U/D)", P);
-        telemetry.addData("Tuning F", "%.4f (D-Pad L/R)", P);
+        telemetry.addData("Tuning F", "%.4f (D-Pad L/R)", F);
         telemetry.addData("Step Size", "%.4f (B Button)", stepSizes[stepIndex]);
 
     }
