@@ -114,6 +114,10 @@ public class LeoCodingV15E extends LinearOpMode {
 
     PrismAnimations.Solid launchlight2off = new PrismAnimations.Solid(new Color( 255, 255, 255));
 
+    PrismAnimations.Solid linedUp = new PrismAnimations.Solid(Color.ORANGE);
+
+    PrismAnimations.Solid linedUpoff = new PrismAnimations.Solid(Color.WHITE);
+
     PrismAnimations.Solid clear = new PrismAnimations.Solid(new Color( 255, 255, 255));
 
 //    boolean lastAtSpeed = false;
@@ -197,35 +201,42 @@ public class LeoCodingV15E extends LinearOpMode {
 //        prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_1);
 //        prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_2);
 
-        green.setBrightness(75);
+        green.setBrightness(50);
         green.setStartIndex(0);
         green.setStopIndex(12);
 
-        purple.setBrightness(75);
+        purple.setBrightness(50);
         purple.setStartIndex(0);
         purple.setStopIndex(12);
 
-        launchlight.setBrightness(75);
+        launchlight.setBrightness(100);
         launchlight.setStartIndex(0);
-        launchlight.setStopIndex(1);
+        launchlight.setStopIndex(0);
 
 //        launchlight.setNumberOfSnakes(1);
 //        launchlight.setSnakeLength(2);
 //        launchlight.setSpacingBetween(2);
 //        launchlight.setSpeed(0.2f);
 
-        launchlight2.setBrightness(75);
-        launchlight2.setStartIndex(4);
+        launchlight2.setBrightness(100);
+        launchlight2.setStartIndex(5);
         launchlight2.setStopIndex(5);
 
         launchlightoff.setBrightness(10);
         launchlightoff.setStartIndex(0);
-        launchlightoff.setStopIndex(1);
+        launchlightoff.setStopIndex(0);
 
         launchlight2off.setBrightness(10);
-        launchlight2off.setStartIndex(4);
+        launchlight2off.setStartIndex(5);
         launchlight2off.setStopIndex(5);
 
+        linedUp.setBrightness(100);
+        linedUp.setStartIndex(8);
+        linedUp.setStopIndex(9);
+
+        linedUpoff.setBrightness(10);
+        linedUpoff.setStartIndex(8);
+        linedUpoff.setStopIndex(9);
 
         clear.setBrightness(5);
         clear.setStartIndex(0);
@@ -350,17 +361,18 @@ public class LeoCodingV15E extends LinearOpMode {
             Revolver.setPower((gamepad2.left_stick_y)*.7);
             //flick control
             if(gamepad2.right_bumper) {
+
                 flick.setPosition(0.77);
 
             }
-            else if(Math.abs(gamepad2.left_stick_y)>.001){
+            else if(Math.abs(gamepad2.left_stick_y)>.0001){
                 flick.setPosition(0.3);
             }
             //flick stays out when button not pressed
-//            else{
-//
-//                flick.setPosition(.30);
-//            }
+            else{
+
+                flick.setPosition(.30);
+            }
             //intake control, keep slow
             intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*.9);
 
@@ -372,18 +384,18 @@ public class LeoCodingV15E extends LinearOpMode {
 
             //fast button * 28 is how many ticks per rev
 
-            if(gamepad2.a){
-                StopWheels();
-                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Revolver.setTargetPosition(160);
-                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Revolver.setPower(.8);
-                sleep(1000);
-                flick.setPosition(.78);
-                sleep(600);
-                Revolver.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
-            }
+//            if(gamepad2.a){
+//                StopWheels();
+//                Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                Revolver.setTargetPosition(160);
+//                Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                Revolver.setPower(.8);
+//                sleep(1000);
+//                flick.setPosition(.78);
+//                sleep(600);
+//                Revolver.setMode((DcMotor.RunMode.RUN_WITHOUT_ENCODER));
+//            }
 
 
 
@@ -436,6 +448,8 @@ public class LeoCodingV15E extends LinearOpMode {
                 prism.insertAndUpdateAnimation(LayerHeight.LAYER_3, launchlight2off);
 
             }
+
+
 
             }
 //            else{
@@ -538,20 +552,26 @@ public class LeoCodingV15E extends LinearOpMode {
                 Team="red";
             }
 
-
-            if((result.getTx())<10&& result.getTx()>-10&& result.getTx()!=0&&team){
-                CanLaunch="Yes:blue";
+//            if(time>.2) {
+                if (Math.abs(result.getTx()) < 5 && result.getTx() != 0 && team) {
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_4, linedUp);
+                    CanLaunch = "Yes:blue";
 //            Launch.setVelocity(far);
-            }
+                }
 
-            if((result.getTx())<10&& result.getTx()>-10&& result.getTx()!=0&&!team){
-                CanLaunch="Yes:red";
+                else if (Math.abs(result.getTx()) < 5 && result.getTx() != 0 && !team) {
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_4, linedUp);
+                    CanLaunch = "Yes:red";
 //            Launch.setVelocity(far);
-            }
+                } else {
+                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_4, linedUpoff);
 
-            else {
-                CanLaunch="No";
-            }
+                    CanLaunch = "No";
+                }
+
+//            }
+
+
             if(result.getTa()<1){
                 closefar="far";
             }
@@ -572,13 +592,13 @@ public class LeoCodingV15E extends LinearOpMode {
 //            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("GreenValue",  color.green());
 //
-//            telemetry.addData("RedValue",  top.red());
-//            telemetry.addData("BlueValue", top.blue());
-//            telemetry.addData("GreenValue",  top.green());
-////
-//            telemetry.addData("RedValue",  top2.red());
-//            telemetry.addData("BlueValue", top2.blue());
-//            telemetry.addData("GreenValue",  top2.green());
+            telemetry.addData("RedValue",  top.red());
+            telemetry.addData("BlueValue", top.blue());
+            telemetry.addData("GreenValue",  top.green());
+//
+            telemetry.addData("RedValue",  top2.red());
+            telemetry.addData("BlueValue", top2.blue());
+            telemetry.addData("GreenValue",  top2.green());
 
 //            telemetry.addData("argb",  color.argb());
 //            telemetry.addData("color:",Color);
@@ -587,25 +607,25 @@ public class LeoCodingV15E extends LinearOpMode {
 
 //            telemetry.addData("time:",time);
 
-            telemetry.addData("Target Velocity",curTargetVelocity);
-            telemetry.addData("Current Velocity", "%.2f",curVelocity);
-            telemetry.addData("Error", "%.2f", error);
+//            telemetry.addData("Target Velocity",curTargetVelocity);
+//            telemetry.addData("Current Velocity", "%.2f",curVelocity);
+//            telemetry.addData("Error", "%.2f", error);
 //
 
 ////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
-//            telemetry.addData("x",result.getTx());
-//              telemetry.addData("goal distance",result.getTa());
+            telemetry.addData("x",result.getTx());
+              telemetry.addData("goal distance",result.getTa());
 //            telemetry.addData("TPS", TPS);
 //            telemetry.addData("launchtarget", launchTarget);
 
             telemetry.addData("Target",targetVelocity);
 //            telemetry.addData("launch",Launch.getCurrentPosition());
 //            telemetry.addData("launch",Launch.getPower());
-//            telemetry.addData("can Launch?:",CanLaunch);
+            telemetry.addData("can Launch?:",CanLaunch);
 //            telemetry.addData("Distance:",closefar);
 //            telemetry.addData("P",  P);
 //            telemetry.addData("F", F);
-            telemetry.addData("launch",Launch.getVelocity()/28);
+//            telemetry.addData("launch",Launch.getVelocity()/28);
 //            telemetry.addData("color1",color1);
 //            telemetry.addData("color2",color2);
 //            telemetry.addData("color3",color3);
