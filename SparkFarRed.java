@@ -337,7 +337,7 @@ public class SparkFarRed extends LinearOpMode {
 //                        sleep(500);
 
                         if (AprilTagID==21) {
-                            SpinUp();
+                            SpinUpshort();
                             launch21();
                         }
                         else if (AprilTagID==22) {
@@ -349,7 +349,7 @@ public class SparkFarRed extends LinearOpMode {
                             launch23();
                         }
                         else{
-                            SpinUp();
+                            SpinUpshort();
                             launch21();
                         }
 //                        sleep(5000);
@@ -683,7 +683,7 @@ public class SparkFarRed extends LinearOpMode {
 
     }
     private  void SpinUpshort(){
-        sleep(1500);
+        sleep(1100);
 
     }
 //    private String SetColor() {

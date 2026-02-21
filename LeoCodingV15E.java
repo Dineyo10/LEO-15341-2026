@@ -127,7 +127,7 @@ public class LeoCodingV15E extends LinearOpMode {
     private boolean team;
     //
     private String Team;
-    double far=57*28;
+    double far=60*28;
     double close=49*28;
     double targetVelocity=close;
     double curTargetVelocity = 0;
@@ -186,7 +186,7 @@ public class LeoCodingV15E extends LinearOpMode {
 //        color = hardwareMap.get(ColorSensor.class, "color");
         top = hardwareMap.get(ColorSensor.class, "top");
 
-        top2 = hardwareMap.get(ColorSensor.class, "top");
+        top2 = hardwareMap.get(ColorSensor.class, "top2");
 
 //        Distance = hardwareMap.get(DistanceSensor.class, "Distance");
 
@@ -323,11 +323,11 @@ public class LeoCodingV15E extends LinearOpMode {
                 left_back.setPower((LB_Power) * .4);
                 right_back.setPower((RB_Power) * .4);
             }
-            int Green= (top.green()+top.green())/2;
+            int Green= (top.green()+top2.green())/2;
 
-            int Blue= (top.blue()+top.blue())/2;
+            int Blue= (top.blue()+top2.blue())/2;
 
-            int Red= (top.red()+top.red())/2;
+            int Red= (top.red()+top2.red())/2;
 
             if(time>.25) {
                 if (Blue > Green && Blue > Red && Blue > 100 ) {
@@ -349,7 +349,6 @@ public class LeoCodingV15E extends LinearOpMode {
 //                    prism.insertAndUpdateAnimation(LayerHeight.LAYER_0, clear);
 //                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, purple);
 //                    prism.insertAndUpdateAnimation(LayerHeight.DISABLED, green);
-
 
 //                    prism.updateAnimationFromIndex(LayerHeight.LAYER_2);
 //            }
@@ -374,8 +373,13 @@ public class LeoCodingV15E extends LinearOpMode {
                 flick.setPosition(.30);
             }
             //intake control, keep slow
-            intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*.9);
+//            intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*.9);
 
+//            intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger));
+
+
+
+            intake.setPower((gamepad1.right_trigger+gamepad2.left_trigger - (gamepad1.left_trigger+gamepad2.right_trigger) )*.9);
 
 
 
@@ -407,20 +411,55 @@ public class LeoCodingV15E extends LinearOpMode {
             if(gamepad2.x){
                 curTargetVelocity=far;
                 targetVelocity=far;
+                intake.setPower(1);
 
             }
+
+
+
 
             //slow speed used more often
             if(gamepad2.b){
                 curTargetVelocity=close;
                 targetVelocity=close;
+                intake.setPower(1);
+
             }
 
             //stop launch
             if(gamepad2.y){
                 curTargetVelocity=0;
+                intake.setPower(0);
+
             }
 
+            //alex lab buttons
+//
+//            if(gamepad1.dpad_down){
+//                curTargetVelocity=16.66*28;
+//
+//            }
+//
+//            if(gamepad1.dpad_left){
+//                curTargetVelocity=33.33*28;
+//
+//            }
+//
+//            if(gamepad1.dpad_right){
+//                curTargetVelocity=50*28;
+//
+//            }
+//
+//            if(gamepad1.dpad_up){
+//                curTargetVelocity=66.66*28;
+//
+//            }
+//
+//            if(gamepad1.a){
+//                curTargetVelocity=83.33*28;
+//
+//            }
+//
 //            PIDFCoefficients pidfCoefficients = new PIDFCoefficients(P, 0, 0, F);
             Launch.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
@@ -553,13 +592,13 @@ public class LeoCodingV15E extends LinearOpMode {
             }
 
 //            if(time>.2) {
-                if (Math.abs(result.getTx()) < 5 && result.getTx() != 0 && team) {
+                if (Math.abs(result.getTx()) < 3 && result.getTx() != 0 && team) {
                     prism.insertAndUpdateAnimation(LayerHeight.LAYER_4, linedUp);
                     CanLaunch = "Yes:blue";
 //            Launch.setVelocity(far);
                 }
 
-                else if (Math.abs(result.getTx()) < 5 && result.getTx() != 0 && !team) {
+                else if (Math.abs(result.getTx()) < 3 && result.getTx() != 0 && !team) {
                     prism.insertAndUpdateAnimation(LayerHeight.LAYER_4, linedUp);
                     CanLaunch = "Yes:red";
 //            Launch.setVelocity(far);
@@ -600,6 +639,10 @@ public class LeoCodingV15E extends LinearOpMode {
             telemetry.addData("BlueValue", top2.blue());
             telemetry.addData("GreenValue",  top2.green());
 
+            telemetry.addData("RedValue",  Red);
+            telemetry.addData("BlueValue", Blue);
+            telemetry.addData("GreenValue",  Green);
+
 //            telemetry.addData("argb",  color.argb());
 //            telemetry.addData("color:",Color);
 //
@@ -625,13 +668,13 @@ public class LeoCodingV15E extends LinearOpMode {
 //            telemetry.addData("Distance:",closefar);
 //            telemetry.addData("P",  P);
 //            telemetry.addData("F", F);
-//            telemetry.addData("launch",Launch.getVelocity()/28);
+            telemetry.addData("launch",Launch.getVelocity()/28);
 //            telemetry.addData("color1",color1);
 //            telemetry.addData("color2",color2);
 //            telemetry.addData("color3",color3);
 //            telemetry.addData("lastpos",lastpos);
 //            telemetry.addData("currentpos",revolverpos);
-//            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
+            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());

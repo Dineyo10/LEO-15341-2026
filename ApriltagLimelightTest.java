@@ -53,21 +53,22 @@ public class ApriltagLimelightTest extends LinearOpMode {
                 for (LLResultTypes.FiducialResult fiducial : fiducials) {
                     int AprilTagID = fiducial.getFiducialId();
 
-        telemetry.addData("Detected Apriltag", AprilTagID);
-            telemetry.addData("angle",result.getTx());
-            telemetry.addData("distance",result.getTa());
+
+        }
+                telemetry.addData("angle",result.getTx());
+                telemetry.addData("distance",result.getTa());
 
 
-            //CODE WORK OR ELSE
+                //CODE WORK OR ELSE
 
 //            telemetry.addData("TagId", );
 //            } else {
 //                telemetry.addData("Limelight", "No Targets");
-            }
-//            telemetry.update();
-        }
+//            }
+                telemetry.update();
         }
     }
+}
 }
 
 
