@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.limelightvision.LLResult;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Autonomous(name="OldBotmeet4bluefarV2", group="blue")
-//@Disabled
+@Disabled
 
 public class OldBotmeet4bluefarV2 extends LinearOpMode {
 
@@ -66,6 +68,8 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
     double close=46.5*28;
 
     int change =0;
+
+    public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(140, 0,0, 13.2);
 
 //    int revolverpos;
 
@@ -230,6 +234,7 @@ public class OldBotmeet4bluefarV2 extends LinearOpMode {
 
         while (opModeIsActive()) {
             odo.update();
+            Launch.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
             //first attempt at doing this
 //            LLResult result = limelight.getLatestResult();
 //

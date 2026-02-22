@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Autonomous(name="OldBotmeet4redfar", group="red")
-//@Disabled
+@Disabled
 
 public class OldBotMeet4redfar extends LinearOpMode {
 

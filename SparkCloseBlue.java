@@ -114,15 +114,16 @@ public class SparkCloseBlue extends LinearOpMode {
     static final Pose2D TARGET_0 = new Pose2D(DistanceUnit.MM,-1200,0,AngleUnit.DEGREES,-65);
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,-1250,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1350,200,AngleUnit.DEGREES,45);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1130,350,AngleUnit.DEGREES,45);
     //    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, -700, 750, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-720,760, AngleUnit.DEGREES,45);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-600,810, AngleUnit.DEGREES,45);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
 
     static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -270, 520, AngleUnit.DEGREES, 45);
+
 
     static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, -1300, 1200, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, -400, 1200, AngleUnit.DEGREES, 0);
@@ -301,6 +302,7 @@ public class SparkCloseBlue extends LinearOpMode {
 //            telemetry.update();
             switch (stateMachine){
                 case WAITING_FOR_START:
+                    flick.setPosition(.3);
                     //the first step in the autonomous
 
 
@@ -339,6 +341,8 @@ public class SparkCloseBlue extends LinearOpMode {
                         if(AprilTagID== 23){
                             telemetry.addLine("23,right");
                         }
+
+
                         telemetry.update();
 //                        sleep(1000);
                         stateMachine = StateMachine.DRIVE_TO_TARGET_1;
@@ -350,7 +354,7 @@ public class SparkCloseBlue extends LinearOpMode {
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
                 case DRIVE_TO_TARGET_1:
-                    if (nav.driveTo(odo.getPosition(), TARGET_1, .4, .2)) {
+                    if (nav.driveTo(odo.getPosition(), TARGET_1, .7, .1)) {
 //                    Stopper.setPower(.3);
 //                        Revolver.setTargetPosition(160);
 //                        sleep(500);
@@ -358,7 +362,7 @@ public class SparkCloseBlue extends LinearOpMode {
 
                         StopWheels();
                         if (AprilTagID==21) {
-                            SpinUpshort();
+//                            SpinUpshort();
 //                            SpinUpshort();
                             launch21();
                         }
@@ -372,9 +376,11 @@ public class SparkCloseBlue extends LinearOpMode {
                         }
                         else{
 //                            SpinUp();
-                            SpinUpshort();
+//                            SpinUpshort();
                             launch21();
                         }
+                        sleep(500);
+                        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         telemetry.addLine("at position #1!");
 //                        stateMachine = StateMachine.DRIVE_TO_TARGET_2;
                         stateMachine = StateMachine.DRIVE_TO_TARGET_2_Left;
@@ -392,15 +398,17 @@ public class SparkCloseBlue extends LinearOpMode {
 //                    }
                     break;
                 case DRIVE_TO_TARGET_2_Left:
-                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, .2)){
-                        intake();
-
+                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, .1)){
                         telemetry.addLine("at position #2!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_3;
                     }
                     break;
                 case DRIVE_TO_TARGET_3:
-                    if (nav.driveTo(odo.getPosition(), TARGET_3, .5, 2)){
+                    intake();
+
+                    if (nav.driveTo(odo.getPosition(), TARGET_3, .35, 2.5)){
+                        change=1;
+
 //                        intake();
 //                        change=0;
                         telemetry.addLine("at position #2!");
@@ -411,17 +419,17 @@ public class SparkCloseBlue extends LinearOpMode {
                     }
                     break;
                 case DRIVE_TO_TARGET_4:
-                    if(nav.driveTo(odo.getPosition(),TARGET_4,.8,.5)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_4,.8,.4)){
                         telemetry.addLine("at position #4");
+//                        sleep(200);
 
-
-                        stateMachine = StateMachine.AT_TARGET;
+                        stateMachine = StateMachine.DRIVE_TO_TARGET_5;
                     }
                     break;
                 case DRIVE_TO_TARGET_5:
-                    if(nav.driveTo(odo.getPosition(),TARGET_5,.4,0.1)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_5,.6,0.1)){
                         telemetry.addLine("at position #5!");
-                        sleep(3000);
+//                        sleep(3000);
                         StopWheels();
                         Stopintake();
 //                        SpinUpshort();
@@ -437,13 +445,14 @@ public class SparkCloseBlue extends LinearOpMode {
                         else{
                             launch21();
                         }
-
+                        Launch.setVelocity(0);
                         stateMachine = StateMachine.DRIVE_TO_TARGET_6;
                     }
                     break;
                 case DRIVE_TO_TARGET_6:
-                    if(nav.driveTo(odo.getPosition(), TARGET_6, 1, 0.1)){
-                        Launch.setVelocity(0);
+                    if(nav.driveTo(odo.getPosition(), TARGET_6, 1, 10)){
+
+                        StopWheels();
                         telemetry.addLine("at position #6");
 //                        transfer();
                         stateMachine = StateMachine.AT_TARGET;
@@ -527,15 +536,15 @@ public class SparkCloseBlue extends LinearOpMode {
 
     }
     private void launch21(){
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(0+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         if(change==0){
             sleep(0);
         }
-        else if(change==-320){
-            sleep(1500);
+        else if(change==1){
+            sleep(2000);
         }
         flick.setPosition(.78);
         sleep(800);
@@ -559,7 +568,7 @@ public class SparkCloseBlue extends LinearOpMode {
         flick.setPosition(.3);
 //        sleep(700);
 //        Launch.setVelocity(0);
-        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
     private void launch22(){
@@ -567,14 +576,14 @@ public class SparkCloseBlue extends LinearOpMode {
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(-320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        if(change==0){
-//            sleep(0);
-//        }
-//        else if(change==-320){
-//            sleep(1500);
-//        }
         Revolver.setPower(.8);
-        sleep(1500);
+        sleep(1600);
+        if(change==0){
+            sleep(0);
+        }
+        else if(change==320){
+            sleep(800);
+        }
         flick.setPosition(.78);
         sleep(600);
 //        Launch.setPower(.55);
@@ -582,7 +591,13 @@ public class SparkCloseBlue extends LinearOpMode {
         Revolver.setTargetPosition(0+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        sleep(1500);
+        sleep(1600);
+        if(change==0){
+            sleep(0);
+        }
+        else if(change==-320){
+            sleep(800);
+        }
         flick.setPosition(.78);
         sleep(600);
         flick.setPosition(.3);
@@ -597,21 +612,21 @@ public class SparkCloseBlue extends LinearOpMode {
         flick.setPosition(.3);
 //        sleep(700);
 //        Launch.setVelocity(0);
-        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
     private void launch23(){
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.8);
+        sleep(1600);
         if(change==0){
             sleep(0);
         }
-        else if(change==-320){
-            sleep(1500);
+        else if(change==320){
+            sleep(3000);
         }
-        Revolver.setPower(.7);
-        sleep(1500);
         flick.setPosition(.78);
         sleep(700);
 //        Launch.setPower(.55);
@@ -619,7 +634,7 @@ public class SparkCloseBlue extends LinearOpMode {
         Revolver.setTargetPosition(640+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(1500);
+        sleep(1600);
         flick.setPosition(.78);
         sleep(700);
         flick.setPosition(.3);
@@ -628,13 +643,13 @@ public class SparkCloseBlue extends LinearOpMode {
         Revolver.setTargetPosition(960+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(1500);
+        sleep(1600);
         flick.setPosition(.78);
         sleep(800);
         flick.setPosition(.3);
 //        sleep(700);
 //        Launch.setVelocity(0);
-        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
     private void intake(){

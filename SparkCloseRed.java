@@ -73,7 +73,7 @@ public class SparkCloseRed extends LinearOpMode {
 
     double close=50*28;
 
-    int change=160;
+    int change=0;
 
     //    private AprilTagProcessor aprilTag;
 //    private VisionPortal visionPortal;
@@ -111,18 +111,19 @@ public class SparkCloseRed extends LinearOpMode {
         DRIVE_TO_TARGET_20
     }
 
-    static final Pose2D TARGET_0 = new Pose2D(DistanceUnit.MM,-1200,0,AngleUnit.DEGREES,0);
+    static final Pose2D TARGET_0 = new Pose2D(DistanceUnit.MM,-1200,0,AngleUnit.DEGREES,65);
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,-1250,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1350,-200,AngleUnit.DEGREES,-55);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1060,-370,AngleUnit.DEGREES,-45);
     //    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, -700, 750, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-820,-710, AngleUnit.DEGREES,-45);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-690,-740, AngleUnit.DEGREES,-45);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
 
-    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -270, -520, AngleUnit.DEGREES, -45);
+    static final Pose2D TARGET_6 = new Pose2D(DistanceUnit.MM, -270, 520, AngleUnit.DEGREES, 45);
+
 
     static final Pose2D TARGET_7 = new Pose2D(DistanceUnit.MM, -1300, 1200, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_8 = new Pose2D(DistanceUnit.MM, -400, 1200, AngleUnit.DEGREES, 0);
@@ -301,34 +302,10 @@ public class SparkCloseRed extends LinearOpMode {
 //            telemetry.update();
             switch (stateMachine){
                 case WAITING_FOR_START:
+                    flick.setPosition(.3);
                     //the first step in the autonomous
-                    LLResult result = limelight.getLatestResult();
 
-                    if (result != null && result.isValid()) {
-                        List<FiducialResult> fiducials = result.getFiducialResults();
 
-                        if (!fiducials.isEmpty()) {
-                            // Grab the first detected tag
-                            AprilTagID = fiducials.get(0).getFiducialId();
-
-                            telemetry.addData("Detected AprilTag", AprilTagID);
-                        } else {
-                            telemetry.addLine("No AprilTags detected");
-                        }
-                    } else {
-                        telemetry.addLine("Limelight: No valid results");
-                    }
-
-                    if(AprilTagID== 21){
-                        telemetry.addLine("21,left");
-                    }
-                    if(AprilTagID== 22){
-                        telemetry.addLine("22,middle");
-                    }
-                    if(AprilTagID== 23){
-                        telemetry.addLine("23,right");
-                    }
-                    telemetry.update();
                     stateMachine = StateMachine.DRIVE_TO_TARGET_0;
                     break;
                 case DRIVE_TO_TARGET_0:
@@ -336,8 +313,38 @@ public class SparkCloseRed extends LinearOpMode {
                     Launch.setVelocity(close);
                     intake.setPower(1);
                     if(nav.driveTo(odo.getPosition(), TARGET_0, .7, 1)){
-                        telemetry.addLine("at position #7");
+                        telemetry.addLine("at position #0");
 //                        transfer();
+                        LLResult result = limelight.getLatestResult();
+
+                        if (result != null && result.isValid()) {
+                            List<FiducialResult> fiducials = result.getFiducialResults();
+
+                            if (!fiducials.isEmpty()) {
+                                // Grab the first detected tag
+                                AprilTagID = fiducials.get(0).getFiducialId();
+
+                                telemetry.addData("Detected AprilTag", AprilTagID);
+                            } else {
+                                telemetry.addLine("No AprilTags detected");
+                            }
+                        } else {
+                            telemetry.addLine("Limelight: No valid results");
+                        }
+
+                        if(AprilTagID== 21){
+                            telemetry.addLine("21,left");
+                        }
+                        if(AprilTagID== 22){
+                            telemetry.addLine("22,middle");
+                        }
+                        if(AprilTagID== 23){
+                            telemetry.addLine("23,right");
+                        }
+
+
+                        telemetry.update();
+//                        sleep(1000);
                         stateMachine = StateMachine.DRIVE_TO_TARGET_1;
                     }
                     break;
@@ -347,16 +354,33 @@ public class SparkCloseRed extends LinearOpMode {
                     Once driveTo returns true, it prints a telemetry line and moves the state machine forward.
                      */
                 case DRIVE_TO_TARGET_1:
-                    if (nav.driveTo(odo.getPosition(), TARGET_1, .4, .2)) {
+                    if (nav.driveTo(odo.getPosition(), TARGET_1, .7, .1)) {
 //                    Stopper.setPower(.3);
 //                        Revolver.setTargetPosition(160);
 //                        sleep(500);
 
-                        launch21();
 
-//                        sleep(5000);
-//                        flick();
-//                        sleep(5000);
+                        StopWheels();
+                        if (AprilTagID==21) {
+//                            SpinUpshort();
+//                            SpinUpshort();
+                            launch21();
+                        }
+                        else if (AprilTagID==22) {
+//                            SpinUpshort();
+                            launch22();
+                        }
+                        else if (AprilTagID==23) {
+//                            SpinUpshort();
+                            launch23();
+                        }
+                        else{
+//                            SpinUp();
+//                            SpinUpshort();
+                            launch21();
+                        }
+                        sleep(500);
+                        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         telemetry.addLine("at position #1!");
 //                        stateMachine = StateMachine.DRIVE_TO_TARGET_2;
                         stateMachine = StateMachine.DRIVE_TO_TARGET_2_Left;
@@ -374,15 +398,17 @@ public class SparkCloseRed extends LinearOpMode {
 //                    }
                     break;
                 case DRIVE_TO_TARGET_2_Left:
-                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, .2)){
-                        intake();
-
+                    if (nav.driveTo(odo.getPosition(), TARGET_2, .7, .1)){
                         telemetry.addLine("at position #2!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_3;
                     }
                     break;
                 case DRIVE_TO_TARGET_3:
-                    if (nav.driveTo(odo.getPosition(), TARGET_3, .4, 3)){
+                    intake();
+
+                    if (nav.driveTo(odo.getPosition(), TARGET_3, .35, 2.5)){
+                        change=1;
+
 //                        intake();
 //                        change=0;
                         telemetry.addLine("at position #2!");
@@ -392,116 +418,82 @@ public class SparkCloseRed extends LinearOpMode {
 
                     }
                     break;
-//                case DRIVE_TO_TARGET_2_Center:
-//                    if (nav.driveTo(odo.getPosition(), TARGET_2_Center, .7, 2)){
-////                        Stopper.setPower(.3);
-//                        intake();
-//
-//                        telemetry.addLine("at position #2!");
-//                        stateMachine = StateMachine.DRIVE_TO_TARGET_3_Center;
-//                    }
-//                    break;
-//                case DRIVE_TO_TARGET_3_Center:
-//                    if (nav.driveTo(odo.getPosition(), TARGET_3_Center, .7, 2)){
-////                        intake();
-//                        telemetry.addLine("at position #2!");
-//                        stateMachine = StateMachine.DRIVE_TO_TARGET_4;
-//                        Stopintake();
-//                        Launch.setPower(.65);
-//                    }
-//                    break;
-//                case DRIVE_TO_TARGET_2_Right:
-//                    if (nav.driveTo(odo.getPosition(), TARGET_2_Right, .7, 2)){
-////                        Stopper.setPower(.3);
-//                        intake();
-//                        telemetry.addLine("at position #2!");
-//                        stateMachine = StateMachine.DRIVE_TO_TARGET_3_Right;
-//                    }
-//                    break;
-//                case DRIVE_TO_TARGET_3_Right:
-//                    if (nav.driveTo(odo.getPosition(), TARGET_3_Right, .7, 2)){
-////                        intake();
-//                        telemetry.addLine("at position #2!");
-//                        stateMachine = StateMachine.DRIVE_TO_TARGET_4;
-//                        Stopintake();
-//                        Launch.setPower(.65);
-//
-//                    }
-//                    break;
-//                case DRIVE_TO_TARGET_3:
-
-//                    if(nav.driveTo(odo.getPosition(), TARGET_3, 1, 0)){
-//                        telemetry.addLine("at position #3");
-////                        sleep(5000);
-////                        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                        stateMachine = StateMachine.DRIVE_TO_TARGET_4;
-//                    }
-//                    break;
                 case DRIVE_TO_TARGET_4:
-                    if(nav.driveTo(odo.getPosition(),TARGET_4,.8,.5)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_4,.8,.4)){
                         telemetry.addLine("at position #4");
-                        Stopintake();
-//                        SpinUpshort();
-                        launch21();
-
-
+//                        sleep(200);
 
                         stateMachine = StateMachine.DRIVE_TO_TARGET_5;
                     }
                     break;
                 case DRIVE_TO_TARGET_5:
-                    if(nav.driveTo(odo.getPosition(),TARGET_5,.4,0.1)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_5,.6,0.1)){
                         telemetry.addLine("at position #5!");
-                        intake.setPower(0);
-//                        Stopintake();
-//                        launch2();
+//                        sleep(3000);
+                        StopWheels();
+                        Stopintake();
+//                        SpinUpshort();
+                        if (AprilTagID==21) {
+                            launch21();
+                        }
+                        else if (AprilTagID==22) {
+                            launch22();
+                        }
+                        else if (AprilTagID==23) {
+                            launch23();
+                        }
+                        else{
+                            launch21();
+                        }
+                        Launch.setVelocity(0);
                         stateMachine = StateMachine.DRIVE_TO_TARGET_6;
                     }
                     break;
                 case DRIVE_TO_TARGET_6:
-                    if(nav.driveTo(odo.getPosition(), TARGET_6, 1, 0.1)){
-                        Launch.setVelocity(0);
+                    if(nav.driveTo(odo.getPosition(), TARGET_6, 1, 10)){
+
+                        StopWheels();
                         telemetry.addLine("at position #6");
 //                        transfer();
                         stateMachine = StateMachine.AT_TARGET;
                     }
                     break;
-                case DRIVE_TO_TARGET_7:
-                    if(nav.driveTo(odo.getPosition(), TARGET_7, .7, 0)){
-                        telemetry.addLine("at position #7");
-//                        transfer();
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_8;
-                    }
-                    break;
-                case DRIVE_TO_TARGET_8:
-                    if(nav.driveTo(odo.getPosition(), TARGET_8, .7, 0)){
-                        telemetry.addLine("at position #8");
-//                        transfer();
-                        stateMachine =StateMachine.DRIVE_TO_TARGET_9;
-                    }
-                    break;
-                case DRIVE_TO_TARGET_9:
-                    if(nav.driveTo(odo.getPosition(), TARGET_9, .7, 0)){
-                        telemetry.addLine("at position #9");
-//                        transfer();
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_10;
-                    }
-                    break;
-                case DRIVE_TO_TARGET_10:
-                    if(nav.driveTo(odo.getPosition(), TARGET_10, 1, 0)){
-                        telemetry.addLine("at position #10");
-//                        transfer();
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_11;
-                    }
-                    break;
-                case DRIVE_TO_TARGET_11:
-                    if(nav.driveTo(odo.getPosition(), TARGET_11, .7, 0)){
-
-                        telemetry.addLine("at position #11");
-//                        transfer();
-                        stateMachine = StateMachine.DRIVE_TO_TARGET_12;
-                    }
-                    break;
+//                case DRIVE_TO_TARGET_7:
+//                    if(nav.driveTo(odo.getPosition(), TARGET_7, .7, 0)){
+//                        telemetry.addLine("at position #7");
+////                        transfer();
+//                        stateMachine = SparkCloseBlue.StateMachine.DRIVE_TO_TARGET_8;
+//                    }
+//                    break;
+//                case DRIVE_TO_TARGET_8:
+//                    if(nav.driveTo(odo.getPosition(), TARGET_8, .7, 0)){
+//                        telemetry.addLine("at position #8");
+////                        transfer();
+//                        stateMachine = SparkCloseBlue.StateMachine.DRIVE_TO_TARGET_9;
+//                    }
+//                    break;
+//                case DRIVE_TO_TARGET_9:
+//                    if(nav.driveTo(odo.getPosition(), TARGET_9, .7, 0)){
+//                        telemetry.addLine("at position #9");
+////                        transfer();
+//                        stateMachine = SparkCloseBlue.StateMachine.DRIVE_TO_TARGET_10;
+//                    }
+//                    break;
+//                case DRIVE_TO_TARGET_10:
+//                    if(nav.driveTo(odo.getPosition(), TARGET_10, 1, 0)){
+//                        telemetry.addLine("at position #10");
+////                        transfer();
+//                        stateMachine = SparkCloseBlue.StateMachine.DRIVE_TO_TARGET_11;
+//                    }
+//                    break;
+//                case DRIVE_TO_TARGET_11:
+//                    if(nav.driveTo(odo.getPosition(), TARGET_11, .7, 0)){
+//
+//                        telemetry.addLine("at position #11");
+////                        transfer();
+//                        stateMachine = SparkCloseBlue.StateMachine.DRIVE_TO_TARGET_12;
+//                    }
+//                    break;
 //                case DRIVE_TO_TARGET_12:
 //                    if(nav.driveTo(odo.getPosition(), TARGET_12, 1, 1)){
 //
@@ -544,16 +536,15 @@ public class SparkCloseRed extends LinearOpMode {
 
     }
     private void launch21(){
-        flick.setPosition(.3);
         Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(0+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        if (change==160){
-            sleep(1500);
+        if(change==0){
+            sleep(0);
         }
-        if (change==0){
-            sleep(100);
+        else if(change==1){
+            sleep(2000);
         }
         flick.setPosition(.78);
         sleep(800);
@@ -562,7 +553,7 @@ public class SparkCloseRed extends LinearOpMode {
         Revolver.setTargetPosition(320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        sleep(1700);
+        sleep(1400);
         flick.setPosition(.78);
         sleep(800);
         flick.setPosition(.3);
@@ -571,71 +562,92 @@ public class SparkCloseRed extends LinearOpMode {
         Revolver.setTargetPosition(640+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
-        sleep(1500);
+        sleep(1400);
         flick.setPosition(.78);
-        sleep(800);
+        sleep(600);
         flick.setPosition(.3);
 //        sleep(700);
-//        Launch.setVelocity(0);
-        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-    private void launch22(){Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Revolver.setTargetPosition(-320+change);
-        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Revolver.setPower(.8);
-        sleep(1900);
-        flick.setPosition(.78);
-        sleep(800);
-//        Launch.setPower(.55);
-        flick.setPosition(.45);
-        Revolver.setTargetPosition(0+change);
-        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Revolver.setPower(.8);
-        sleep(1900);
-        flick.setPosition(.78);
-        sleep(800);
-        flick.setPosition(.45);
-//        Launch.setPower(.75);
-//    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Revolver.setTargetPosition(320+change);
-        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Revolver.setPower(.8);
-        sleep(1900);
-        flick.setPosition(.78);
-        sleep(800);
-        flick.setPosition(.45);
-        sleep(700);
 //        Launch.setVelocity(0);
 //        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-    private void launch23(){Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    private void launch22(){
+        flick.setPosition(.3);
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setTargetPosition(-320+change);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.8);
+        sleep(1600);
+        if(change==0){
+            sleep(0);
+        }
+        else if(change==320){
+            sleep(800);
+        }
+        flick.setPosition(.78);
+        sleep(600);
+//        Launch.setPower(.55);
+        flick.setPosition(.3);
+        Revolver.setTargetPosition(0+change);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.8);
+        sleep(1600);
+        if(change==0){
+            sleep(0);
+        }
+        else if(change==-320){
+            sleep(800);
+        }
+        flick.setPosition(.78);
+        sleep(600);
+        flick.setPosition(.3);
+//        Launch.setPower(.75);
+//    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Revolver.setPower(.7);
-        sleep(2500);
+        Revolver.setPower(.8);
+        sleep(1500);
         flick.setPosition(.78);
-        sleep(1000);
+        sleep(600);
+        flick.setPosition(.3);
+//        sleep(700);
+//        Launch.setVelocity(0);
+//        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+    private void launch23(){
+        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Revolver.setTargetPosition(320+change);
+        Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Revolver.setPower(.8);
+        sleep(1600);
+        if(change==0){
+            sleep(0);
+        }
+        else if(change==320){
+            sleep(3000);
+        }
+        flick.setPosition(.78);
+        sleep(700);
 //        Launch.setPower(.55);
-        flick.setPosition(.45);
+        flick.setPosition(.3);
         Revolver.setTargetPosition(640+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2000);
+        sleep(1600);
         flick.setPosition(.78);
-        sleep(800);
-        flick.setPosition(.45);
+        sleep(700);
+        flick.setPosition(.3);
 //        Launch.setPower(.75);
 //    Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Revolver.setTargetPosition(960+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.7);
-        sleep(2500);
+        sleep(1600);
         flick.setPosition(.78);
         sleep(800);
-        flick.setPosition(.45);
-        sleep(700);
+        flick.setPosition(.3);
+//        sleep(700);
 //        Launch.setVelocity(0);
 //        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -643,14 +655,14 @@ public class SparkCloseRed extends LinearOpMode {
     private void intake(){
 //        Launch.setVelocity(0);
         intake.setPower(1);
-        Revolver.setTargetPosition(-160*7);
+        Revolver.setTargetPosition(-160*8);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Revolver.setPower(.8);
+        Revolver.setPower(.6);
 //        sleep(500);
 //        sleep(1000);
     }
     private void Stopintake() {
-//        intake.setPower(0);
+        intake.setPower(0);
 //        Revolver.setPower(0);
 //        Revolver.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        side1.setPower(0);
@@ -669,8 +681,28 @@ public class SparkCloseRed extends LinearOpMode {
 
     }
     private  void SpinUpshort(){
-        sleep(1500);
+        sleep(2000);
 
     }
+    //    private String SetColor() {
+//        String Colors;
+//        if (color.blue() > color.green() &&color.blue()>color.red() && color.blue() > 100) {
+//            Colors = "purple";
+//        } else if (color.green() > color.blue() && color.green()>color.red() &&color.green() > 100) {
+//            Colors = "green";
+//        } else if (color.red() > color.blue() && color.red()>color.green()&& color.red() > 100){
+//            Colors = "none";
+//        }
+//        else {
+//            Colors="none";
+//        }
+//        return Colors;
+//    }
+    public  void StopWheels(){
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
 
+    }
 }

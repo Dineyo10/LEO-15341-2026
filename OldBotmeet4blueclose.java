@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Autonomous(name="OldBotmeet4blueclose", group="blue")
-//@Disabled
+@Disabled
 
 public class OldBotmeet4blueclose extends LinearOpMode {
 

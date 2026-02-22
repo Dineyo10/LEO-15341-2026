@@ -107,10 +107,10 @@ public class SparkFarBlue extends LinearOpMode {
     }
 
 
-    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,50,0,AngleUnit.DEGREES,22);
+    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,50,0,AngleUnit.DEGREES,23);
     static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 610, 300, AngleUnit.DEGREES, 90);
-    static final Pose2D TARGET_3_Left = new Pose2D(DistanceUnit.MM, 640, 1100, AngleUnit.DEGREES, 90);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 50, 0, AngleUnit.DEGREES, 22);
+    static final Pose2D TARGET_3_Left = new Pose2D(DistanceUnit.MM, 640, 1240, AngleUnit.DEGREES, 90);
+    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 50, 0, AngleUnit.DEGREES, 23);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 700, 0, AngleUnit.DEGREES, 0);
 
 
@@ -358,6 +358,8 @@ public class SparkFarBlue extends LinearOpMode {
                             launch21();
                         }
                         sleep(500);
+                        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 //                        sleep(5000);
 //                        flick();
 //                        sleep(5000);
@@ -378,21 +380,22 @@ public class SparkFarBlue extends LinearOpMode {
                     break;
                 case DRIVE_TO_TARGET_3_Left:
                     intake();
-                    if (nav.driveTo(odo.getPosition(), TARGET_3_Left, .4, 1.5)){
+                    if (nav.driveTo(odo.getPosition(), TARGET_3_Left, .3, 1.5)){
 //                        intake();
 
-                        if (AprilTagID==21) {
-                            change=0;
-                        }
-                        else if (AprilTagID==22) {
-                            change=-320;
-                        }
-                        else if (AprilTagID==23) {
-                            change=-960;
-                        }
-                        else{
-                            change=0;
-                        }
+                        change=-320;
+//                        if (AprilTagID==21) {
+//                            change=-320;
+//                        }
+//                        else if (AprilTagID==22) {
+//                            change=-320;
+//                        }
+//                        else if (AprilTagID==23) {
+//                            change=-320;
+//                        }
+//                        else{
+//                            change=0;
+//                        }
                         telemetry.addLine("at position #2!");
                         stateMachine = StateMachine.DRIVE_TO_TARGET_4;
 
@@ -606,13 +609,13 @@ public class SparkFarBlue extends LinearOpMode {
         Revolver.setTargetPosition(-320+change);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
+        sleep(1600);
         if(change==0){
             sleep(0);
         }
         else if(change==-320){
             sleep(800);
         }
-        sleep(1600);
         flick.setPosition(.78);
         sleep(600);
 //        Launch.setPower(.55);
@@ -621,6 +624,12 @@ public class SparkFarBlue extends LinearOpMode {
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Revolver.setPower(.8);
         sleep(1600);
+        if(change==0){
+            sleep(0);
+        }
+        else if(change==-320){
+            sleep(800);
+        }
         flick.setPosition(.78);
         sleep(600);
         flick.setPosition(.3);
@@ -647,7 +656,7 @@ public class SparkFarBlue extends LinearOpMode {
         if(change==0){
             sleep(0);
         }
-        else if(change==-960){
+        else if(change==-320){
             sleep(3000);
         }
         flick.setPosition(.78);
@@ -677,7 +686,6 @@ public class SparkFarBlue extends LinearOpMode {
     }
     private void intake(){
 //        Launch.setVelocity(0);
-        Revolver.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setPower(1);
         Revolver.setTargetPosition(-160*8);
         Revolver.setMode(DcMotor.RunMode.RUN_TO_POSITION);
