@@ -45,7 +45,7 @@ import java.util.Set;
 import javax.sql.RowSetEvent;
 
 //this is for the meet 3 bot between meet 3 and 4
-//@Disabled
+@Disabled
 @TeleOp
 public class LeoCodingV15E extends LinearOpMode {
     private DcMotor left_drive;
@@ -55,17 +55,17 @@ public class LeoCodingV15E extends LinearOpMode {
 
     public DcMotorEx Launch;
     private DcMotor intake;
-    private CRServo side1;
-    private CRServo side2;
+//    private CRServo side1;
+//    private CRServo side2;
     private DcMotor Revolver;
     private Servo flick;
 //    private DistanceSensor Distance;
 
-    private String color1;
-    private String color2;
-    private String color3;
+//    private String color1;
+//    private String color2;
+//    private String color3;
 
-    Timer flicktime = new Timer();
+//    Timer flicktime = new Timer();
 
 //    TimerTask flicktask = new TimerTask();
 
@@ -178,9 +178,9 @@ public class LeoCodingV15E extends LinearOpMode {
 
 //        test = hardwareMap.get(DcMotor.class, "test");
 
-        side1 = hardwareMap.get(CRServo.class, "side1");
-
-        side2 = hardwareMap.get(CRServo.class, "side2");
+//        side1 = hardwareMap.get(CRServo.class, "side1");
+//
+//        side2 = hardwareMap.get(CRServo.class, "side2");
 
 
 //        color = hardwareMap.get(ColorSensor.class, "color");
@@ -364,6 +364,7 @@ public class LeoCodingV15E extends LinearOpMode {
                 flick.setPosition(0.77);
 
             }
+
             else if(Math.abs(gamepad2.left_stick_y)>.0001){
                 flick.setPosition(0.3);
             }
@@ -631,50 +632,50 @@ public class LeoCodingV15E extends LinearOpMode {
 //            telemetry.addData("BlueValue", color.blue());
 //            telemetry.addData("GreenValue",  color.green());
 //
-            telemetry.addData("RedValue",  top.red());
-            telemetry.addData("BlueValue", top.blue());
-            telemetry.addData("GreenValue",  top.green());
+//            telemetry.addData("RedValue",  top.red());
+//            telemetry.addData("BlueValue", top.blue());
+//            telemetry.addData("GreenValue",  top.green());
+////
+//            telemetry.addData("RedValue",  top2.red());
+//            telemetry.addData("BlueValue", top2.blue());
+//            telemetry.addData("GreenValue",  top2.green());
 //
-            telemetry.addData("RedValue",  top2.red());
-            telemetry.addData("BlueValue", top2.blue());
-            telemetry.addData("GreenValue",  top2.green());
-
-            telemetry.addData("RedValue",  Red);
-            telemetry.addData("BlueValue", Blue);
-            telemetry.addData("GreenValue",  Green);
-
-//            telemetry.addData("argb",  color.argb());
-//            telemetry.addData("color:",Color);
+//            telemetry.addData("RedValue",  Red);
+//            telemetry.addData("BlueValue", Blue);
+//            telemetry.addData("GreenValue",  Green);
 //
+////            telemetry.addData("argb",  color.argb());
+////            telemetry.addData("color:",Color);
+////
             telemetry.addData("team:",Team);
-
-//            telemetry.addData("time:",time);
-
-//            telemetry.addData("Target Velocity",curTargetVelocity);
-//            telemetry.addData("Current Velocity", "%.2f",curVelocity);
-//            telemetry.addData("Error", "%.2f", error);
 //
-
-////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
-            telemetry.addData("x",result.getTx());
-              telemetry.addData("goal distance",result.getTa());
-//            telemetry.addData("TPS", TPS);
-//            telemetry.addData("launchtarget", launchTarget);
-
-            telemetry.addData("Target",targetVelocity);
-//            telemetry.addData("launch",Launch.getCurrentPosition());
-//            telemetry.addData("launch",Launch.getPower());
-            telemetry.addData("can Launch?:",CanLaunch);
-//            telemetry.addData("Distance:",closefar);
-//            telemetry.addData("P",  P);
-//            telemetry.addData("F", F);
-            telemetry.addData("launch",Launch.getVelocity()/28);
-//            telemetry.addData("color1",color1);
-//            telemetry.addData("color2",color2);
-//            telemetry.addData("color3",color3);
-//            telemetry.addData("lastpos",lastpos);
-//            telemetry.addData("currentpos",revolverpos);
-            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
+////            telemetry.addData("time:",time);
+//
+////            telemetry.addData("Target Velocity",curTargetVelocity);
+////            telemetry.addData("Current Velocity", "%.2f",curVelocity);
+////            telemetry.addData("Error", "%.2f", error);
+////
+//
+//////            telemetry.addData("distance",Distance.getDistance(DistanceUnit.MM));
+//            telemetry.addData("x",result.getTx());
+//              telemetry.addData("goal distance",result.getTa());
+////            telemetry.addData("TPS", TPS);
+////            telemetry.addData("launchtarget", launchTarget);
+//
+//            telemetry.addData("Target",targetVelocity);
+////            telemetry.addData("launch",Launch.getCurrentPosition());
+////            telemetry.addData("launch",Launch.getPower());
+//            telemetry.addData("can Launch?:",CanLaunch);
+////            telemetry.addData("Distance:",closefar);
+////            telemetry.addData("P",  P);
+////            telemetry.addData("F", F);
+//            telemetry.addData("launch",Launch.getVelocity()/28);
+////            telemetry.addData("color1",color1);
+////            telemetry.addData("color2",color2);
+////            telemetry.addData("color3",color3);
+////            telemetry.addData("lastpos",lastpos);
+////            telemetry.addData("currentpos",revolverpos);
+//            telemetry.addData("Revolver:", Revolver.getCurrentPosition());
             telemetry.update();
 
 //            telemetry.addData("TouchSensor", touch.isPressed());

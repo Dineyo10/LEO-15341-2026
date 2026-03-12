@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -75,6 +76,9 @@ public class SparkCloseBlue extends LinearOpMode {
 
     int change=0;
 
+
+    public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(140, 0,0, 13.2);
+
     //    private AprilTagProcessor aprilTag;
 //    private VisionPortal visionPortal;
     GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
@@ -118,7 +122,7 @@ public class SparkCloseBlue extends LinearOpMode {
     //    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, -700, 750, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-600,810, AngleUnit.DEGREES,45);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-670,790, AngleUnit.DEGREES,45);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
 
@@ -240,6 +244,8 @@ public class SparkCloseBlue extends LinearOpMode {
 
         while (opModeIsActive()) {
             odo.update();
+            Launch.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+
             //first attempt at doing this
 //            LLResult result = limelight.getLatestResult();
 //

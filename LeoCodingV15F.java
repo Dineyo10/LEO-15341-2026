@@ -193,7 +193,7 @@ public class LeoCodingV15F extends LinearOpMode {
         prism = hardwareMap.get(GoBildaPrismDriver.class,"prism");
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-//        limelight.start();
+        limelight.start();
 
 //        limelight.pipelineSwitch(0);
 
@@ -297,6 +297,8 @@ public class LeoCodingV15F extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            limelight.stop();
+
             //forward/backward, strafe left/right, turn left/right
             float LF_Power=((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));
             float RF_Power=((gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x));

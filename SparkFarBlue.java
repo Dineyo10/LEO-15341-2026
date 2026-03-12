@@ -108,7 +108,7 @@ public class SparkFarBlue extends LinearOpMode {
 
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,50,0,AngleUnit.DEGREES,23);
-    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 610, 300, AngleUnit.DEGREES, 90);
+    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 640, 300, AngleUnit.DEGREES, 90);
     static final Pose2D TARGET_3_Left = new Pose2D(DistanceUnit.MM, 640, 1240, AngleUnit.DEGREES, 90);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 50, 0, AngleUnit.DEGREES, 23);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 700, 0, AngleUnit.DEGREES, 0);

@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.limelightvision.LLResult;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
@@ -68,6 +69,8 @@ public class SparkFarRed extends LinearOpMode {
     int change =0;
 
 //    int revolverpos;
+public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(140, 0,0, 13.2);
+
 
     //    private AprilTagProcessor aprilTag;
 //    private VisionPortal visionPortal;
@@ -106,10 +109,10 @@ public class SparkFarRed extends LinearOpMode {
     }
 
 
-    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,50,0,AngleUnit.DEGREES,-23);
-    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 610, -300, AngleUnit.DEGREES, -90);
+    static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,50,0,AngleUnit.DEGREES,-21);
+    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, 610, -200, AngleUnit.DEGREES, -90);
     static final Pose2D TARGET_3_Left = new Pose2D(DistanceUnit.MM, 640, -1240, AngleUnit.DEGREES, -90);
-    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 50, 0, AngleUnit.DEGREES, -23);
+    static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, 50, 0, AngleUnit.DEGREES, -21);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, 700, 0, AngleUnit.DEGREES, 0);
 
 
@@ -230,6 +233,8 @@ public class SparkFarRed extends LinearOpMode {
 
         while (opModeIsActive()) {
             odo.update();
+            Launch.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+
             //first attempt at doing this
 //            LLResult result = limelight.getLatestResult();
 //
@@ -447,7 +452,7 @@ public class SparkFarRed extends LinearOpMode {
 //                    }
 //                    break;
                 case DRIVE_TO_TARGET_4:
-                    if(nav.driveTo(odo.getPosition(),TARGET_4,.8,1)){
+                    if(nav.driveTo(odo.getPosition(),TARGET_4,.8,.5)){
                         telemetry.addLine("at position #4");
 //                        sleep(3000);
 //                        telemetry.addData("change value",change);

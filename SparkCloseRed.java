@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.hardware.limelightvision.Fiducial;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -74,6 +75,8 @@ public class SparkCloseRed extends LinearOpMode {
     double close=50*28;
 
     int change=0;
+    public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(140, 0,0, 13.2);
+
 
     //    private AprilTagProcessor aprilTag;
 //    private VisionPortal visionPortal;
@@ -114,11 +117,11 @@ public class SparkCloseRed extends LinearOpMode {
     static final Pose2D TARGET_0 = new Pose2D(DistanceUnit.MM,-1200,0,AngleUnit.DEGREES,65);
 
     static final Pose2D TARGET_1 = new Pose2D(DistanceUnit.MM,-1250,0,AngleUnit.DEGREES,0);
-    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1060,-370,AngleUnit.DEGREES,-45);
+    static final Pose2D TARGET_2 = new Pose2D(DistanceUnit.MM,-1110,-350,AngleUnit.DEGREES,-45);
     //    static final Pose2D TARGET_2_Left = new Pose2D(DistanceUnit.MM, -700, 750, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Center = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
 //    static final Pose2D TARGET_2_Right = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 45);
-    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-690,-740, AngleUnit.DEGREES,-45);
+    static final Pose2D TARGET_3 = new Pose2D(DistanceUnit.MM,-700,-740, AngleUnit.DEGREES,-45);
     static final Pose2D TARGET_4 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
     static final Pose2D TARGET_5 = new Pose2D(DistanceUnit.MM, -1250, 0, AngleUnit.DEGREES, 0);
 
@@ -240,6 +243,8 @@ public class SparkCloseRed extends LinearOpMode {
 
         while (opModeIsActive()) {
             odo.update();
+            Launch.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+
             //first attempt at doing this
 //            LLResult result = limelight.getLatestResult();
 //
@@ -406,7 +411,7 @@ public class SparkCloseRed extends LinearOpMode {
                 case DRIVE_TO_TARGET_3:
                     intake();
 
-                    if (nav.driveTo(odo.getPosition(), TARGET_3, .35, 2.5)){
+                    if (nav.driveTo(odo.getPosition(), TARGET_3, .4, 2.5)){
                         change=1;
 
 //                        intake();
@@ -429,6 +434,7 @@ public class SparkCloseRed extends LinearOpMode {
                 case DRIVE_TO_TARGET_5:
                     if(nav.driveTo(odo.getPosition(),TARGET_5,.6,0.1)){
                         telemetry.addLine("at position #5!");
+                        sleep(1000);
 //                        sleep(3000);
                         StopWheels();
                         Stopintake();
